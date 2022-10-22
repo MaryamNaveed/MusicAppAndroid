@@ -6,25 +6,37 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
 
     Handler handler;
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth=FirebaseAuth.getInstance();
         setContentView(R.layout.activity_main);
 
         handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                Intent intent= new Intent(MainActivity.this, MainActivity2.class);
-                startActivity(intent);
+                if(mAuth.getCurrentUser()!=null){
+                    startActivity(new Intent(MainActivity.this, CreateAccount.class));
+                }
+                else{
+                    Intent intent= new Intent(MainActivity.this, CreateAccount.class);
+                    startActivity(intent);
+                }
+
                 finish();
             }
         }, 5000);
     }
+
+
 }
