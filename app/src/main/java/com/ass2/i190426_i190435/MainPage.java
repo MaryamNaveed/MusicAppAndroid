@@ -124,6 +124,9 @@ public class MainPage extends AppCompatActivity {
                     case R.id.page_2:
                         startActivity(new Intent(MainPage.this, AddMusic.class));
                         break;
+                    case R.id.page_3:
+                        startActivity(new Intent(MainPage.this, Search.class));
+                        break;
                 }
                 return true;
             }

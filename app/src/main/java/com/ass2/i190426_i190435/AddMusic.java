@@ -68,6 +68,10 @@ public class AddMusic extends AppCompatActivity {
                     case R.id.page_1:
                         startActivity(new Intent(AddMusic.this, MainActivity2.class));
                         break;
+
+                    case R.id.page_3:
+                        startActivity(new Intent(AddMusic.this, Search.class));
+                        break;
                 }
                 return true;
             }
@@ -83,7 +87,8 @@ public class AddMusic extends AppCompatActivity {
                     intent.putExtra("title", title.getText().toString());
                     intent.putExtra("genre", genre.getText().toString());
                     intent.putExtra("description", description.getText().toString());
-                    intent.putExtra("image", selectedImage.toString());
+                    intent.putExtra("image", selectedImage.toString()
+                    );
                     startActivity(intent);
                 }
 
