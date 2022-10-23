@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.ass2.i190426_i190435">
 
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +17,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.I190426_i190435"
         tools:targetApi="31">
+        <activity
+            android:name=".RecordInfo"
+            android:exported="false" />
+        <activity
+            android:name=".RecordMusic"
+            android:exported="false" />
+        <activity
+            android:name=".BottomNavigation"
+            android:exported="false" />
+        <activity
+            android:name=".AddMusic"
+            android:exported="false" />
+        <activity
+            android:name=".MainPage"
+            android:exported="false" />
         <activity
             android:name=".SignIn"
             android:exported="false" />

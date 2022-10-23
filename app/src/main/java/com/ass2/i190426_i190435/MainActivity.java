@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             public void run() {
                 if(mAuth.getCurrentUser()!=null){
-                    startActivity(new Intent(MainActivity.this, CreateAccount.class));
+                    startActivity(new Intent(MainActivity.this, MainPage.class));
                 }
                 else{
                     Intent intent= new Intent(MainActivity.this, CreateAccount.class);

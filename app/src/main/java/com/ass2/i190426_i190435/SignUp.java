@@ -64,7 +64,7 @@ public class SignUp extends AppCompatActivity {
                         Toast.makeText(SignUp.this,
                                 "success",
                                 Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(SignUp.this, MainActivity2.class));
+                        startActivity(new Intent(SignUp.this, MainPage.class));
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override

@@ -56,7 +56,7 @@ public class SignIn extends AppCompatActivity {
                 ).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
-                        Intent intent= new Intent(SignIn.this, MainActivity2.class);
+                        Intent intent= new Intent(SignIn.this, MainPage.class);
                         startActivity(intent);
 
                     }
