@@ -6,6 +6,7 @@ import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaRecorder;
 import android.net.Uri;
@@ -20,6 +21,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -113,11 +116,11 @@ public class RecordMusic extends AppCompatActivity {
 
 
 
-        Uri uri = Uri.fromFile(new File(fileName));
+        Uri uri1 = Uri.fromFile(new File(fileName));
         FirebaseStorage storage = FirebaseStorage.getInstance();
         Calendar c=Calendar.getInstance();
         StorageReference ref = storage.getReference().child("Music/audio"+mAuth.getCurrentUser().getUid()+c.getTimeInMillis()+".mp3");
-        ref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        ref.putFile(uri1).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(
@@ -129,9 +132,33 @@ public class RecordMusic extends AppCompatActivity {
                 task.addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                        Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
+                        task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Intent intent=getIntent();
+                                String title = intent.getStringExtra("title");
+                                String genre = intent.getStringExtra("genre");
+                                String description = intent.getStringExtra("description");
+
+                                Music m = new Music(
+                                        title,
+                                        genre,
+                                        description,
+                                        uri.toString()
+                                );
+
+                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                DatabaseReference myRef = database.getReference("music");
 
 
+                                DatabaseReference abc = myRef.push();
+                                abc.setValue(m);
+
+                            }
+                        });
                     }
+
                 });
             }
         }).addOnFailureListener(new OnFailureListener() {

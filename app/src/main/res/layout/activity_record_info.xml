@@ -4,6 +4,209 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RecordInfo">
+    tools:context=".AddMusic">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:orientation="vertical"
+        android:weightSum="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:weightSum="1"
+            android:orientation="horizontal"
+            android:layout_weight=".1">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:layout_margin="10dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/back">
+
+                </ImageView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".5">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Record Music"
+                    android:textColor="@color/white"
+                    android:textSize="30dp"
+                    android:gravity="center">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".3">
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".13">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".08"
+            android:layout_margin="20dp">
+
+            <EditText
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Title"
+                android:inputType="text"
+                android:textSize="20dp"
+                android:background="@drawable/roundedtextfield"
+                android:textColor="#FFC107"
+                android:padding="15dp"
+                android:textColorHint="#FFC107">
+
+            </EditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".08"
+            android:layout_margin="20dp">
+
+            <EditText
+                android:id="@+id/genre"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Genre"
+                android:inputType="text"
+                android:textSize="20dp"
+                android:background="@drawable/roundedtextfield"
+                android:textColor="#FFC107"
+                android:padding="15dp"
+                android:textColorHint="#FFC107">
+
+            </EditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".16"
+            android:layout_margin="20dp">
+
+            <EditText
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="Description"
+                android:inputType="textMultiLine"
+                android:textSize="20dp"
+                android:background="@drawable/roundedtextfield"
+                android:textColor="#FFC107"
+                android:padding="15dp"
+                android:textColorHint="#FFC107">
+
+            </EditText>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".02">
+
+        </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".13"
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+
+            <Button
+                android:id="@+id/record"
+                android:layout_width="139dp"
+                android:layout_height="52dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/roundedbutton"
+                android:text="Record"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold">
+
+            </Button>
+
+
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight=".2"></LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight=".1"
+            android:background="#434343">
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/mNavigationBottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:itemTextColor="@color/white"
+                app:itemIconSize="50dp"
+                app:itemIconTint="#FFC107"
+                app:elevation="6dp"
+                app:labelVisibilityMode="labeled"
+                app:itemBackground="@drawable/bg_color_tab"
+                app:menu="@menu/bottom_navigation_menu"
+                >
+
+            </com.google.android.material.bottomnavigation.BottomNavigationView>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

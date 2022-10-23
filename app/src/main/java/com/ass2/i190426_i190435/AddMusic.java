@@ -73,7 +73,7 @@ public class AddMusic extends AppCompatActivity {
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AddMusic.this, RecordMusic.class));
+                startActivity(new Intent(AddMusic.this, RecordInfo.class));
             }
         });
 
@@ -88,6 +88,11 @@ public class AddMusic extends AppCompatActivity {
                     Toast.makeText(AddMusic.this, "Please select music", Toast.LENGTH_LONG).show();
                 }
                 else{
+                    Toast.makeText(
+                            AddMusic.this,
+                            "Uploading Started",
+                            Toast.LENGTH_LONG
+                    ).show();
                     Calendar c=Calendar.getInstance();
                     StorageReference ref = storage.getReference().child("Music/music"+mAuth.getCurrentUser().getUid()+c.getTimeInMillis()+".mp3");
 
@@ -109,7 +114,7 @@ public class AddMusic extends AppCompatActivity {
                                             title.getText().toString(),
                                             genre.getText().toString(),
                                             description.getText().toString(),
-                                            music.toString()
+                                            uri.toString()
                                     );
 
 
@@ -155,68 +160,14 @@ public class AddMusic extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("Reached");
+
         if (requestCode==20 & resultCode==RESULT_OK){
 
             music = data.getData();
             linktext.setText(music.toString());
             selected=true;
 
-//            dp.setImageURI(image);
-//            Calendar c=Calendar.getInstance();
-//            FirebaseStorage storage = FirebaseStorage.getInstance();
-//            System.out.println("Reached 2");
 
-//            StorageReference ref = storage.getReference().child("Music/mymusic"+mAuth.getCurrentUser().getUid()+c.getTimeInMillis()+".mp3");
-//            System.out.println(ref);
-//            ref.putFile(music).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                    Toast.makeText(
-//                            AddMusic.this,
-//                            "Uploaded",
-//                            Toast.LENGTH_LONG
-//                    ).show();
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    Toast.makeText(
-//                            AddMusic.this,
-//                            "Failed",
-//                            Toast.LENGTH_LONG
-//                    ).show();
-//                }
-//            });
-//            ref.putFile(music).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//
-//                    Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
-//                    task.addOnSuccessListener(new OnSuccessListener<Uri>() {
-//
-//                        @Override
-//                        public void onSuccess(Uri uri) {
-//                            System.out.println("Reached 4");
-//
-//                            linktext.setText(linktext.getText().toString()+uri.toString());
-//
-//                            //Pi.get().load(uri.toString()).into(music);
-//                        }
-//                    });
-//
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(@NonNull Exception e) {
-//                    System.out.println("Reached 5");
-//                    Toast.makeText(
-//                            AddMusic.this,
-//                            "Failed",
-//                            Toast.LENGTH_LONG
-//                    ).show();
-//                }
-//            });
         }
     }
 }
