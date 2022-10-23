@@ -9,10 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 public class RecordInfo extends AppCompatActivity {
 
     EditText title, genre, description;
     Button record;
+    BottomNavigationView mNavigationBottom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,9 @@ public class RecordInfo extends AppCompatActivity {
         title=findViewById(R.id.title);
         genre=findViewById(R.id.genre);
         description=findViewById(R.id.description);
+        mNavigationBottom=findViewById(R.id.mNavigationBottom);
+
+        mNavigationBottom.setSelectedItemId(R.id.page_2);
 
         record.setOnClickListener(new View.OnClickListener() {
             @Override

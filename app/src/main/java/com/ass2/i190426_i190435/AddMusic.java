@@ -38,7 +38,9 @@ public class AddMusic extends AppCompatActivity {
     Button upload;
     Uri music;
     FirebaseAuth mAuth;
-    boolean selected = false;
+    boolean selected = false, isSelected=false;
+    Uri selectedImage=null;
+    String audio, image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,18 @@ public class AddMusic extends AppCompatActivity {
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(AddMusic.this, RecordInfo.class));
+                if(isSelected==false){
+                    Toast.makeText(AddMusic.this, "Please select image", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Intent intent=new Intent(AddMusic.this, RecordMusic.class);
+                    intent.putExtra("title", title.getText().toString());
+                    intent.putExtra("genre", genre.getText().toString());
+                    intent.putExtra("description", description.getText().toString());
+                    intent.putExtra("image", selectedImage.toString());
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -86,6 +99,9 @@ public class AddMusic extends AppCompatActivity {
             public void onClick(View view) {
                 if(selected==false){
                     Toast.makeText(AddMusic.this, "Please select music", Toast.LENGTH_LONG).show();
+                }
+                else if(isSelected==false){
+                    Toast.makeText(AddMusic.this, "Please select image", Toast.LENGTH_LONG).show();
                 }
                 else{
                     Toast.makeText(
@@ -102,7 +118,7 @@ public class AddMusic extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Toast.makeText(
                                     AddMusic.this,
-                                    "Uploaded to storage",
+                                    "Uploaded Song to storage",
                                     Toast.LENGTH_LONG
                             ).show();
                             Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
@@ -110,16 +126,66 @@ public class AddMusic extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Uri uri) {
 
-                                    Music m = new Music(
-                                            title.getText().toString(),
-                                            genre.getText().toString(),
-                                            description.getText().toString(),
-                                            uri.toString()
-                                    );
+                                    audio = uri.toString();
 
 
-                                    DatabaseReference abc = myRef.push();
-                                    abc.setValue(m);
+                                    FirebaseDatabase database = FirebaseDatabase.getInstance();
+                                    DatabaseReference myRef = database.getReference("music");
+                                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                                    Calendar c = Calendar.getInstance();
+
+                                    StorageReference ref = storage.getReference().child("MusicImages/image"+mAuth.getCurrentUser()+c.getTimeInMillis()+".jpg");
+
+                                    ref.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            Toast.makeText(
+                                                    AddMusic.this,
+                                                    "Uploaded Image to storage",
+                                                    Toast.LENGTH_LONG
+                                            ).show();
+                                            Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
+                                            task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                                @Override
+                                                public void onSuccess(Uri uri) {
+                                                    Toast.makeText(
+                                                            AddMusic.this,
+                                                            "Uploading to database",
+                                                            Toast.LENGTH_LONG
+                                                    ).show();
+                                                    image=uri.toString();
+                                                    Music m = new Music(
+                                                            title.getText().toString(),
+                                                            genre.getText().toString(),
+                                                            description.getText().toString(),
+                                                            audio,
+                                                            image
+                                                    );
+
+                                                    DatabaseReference abc = myRef.push();
+                                                    abc.setValue(m);
+                                                    Toast.makeText(
+                                                            AddMusic.this,
+                                                            "Added to database",
+                                                            Toast.LENGTH_LONG
+                                                    ).show();
+                                                }
+                                            });
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(
+                                                    AddMusic.this,
+                                                    "Failed",
+                                                    Toast.LENGTH_LONG
+                                            ).show();
+                                        }
+                                    });;
+
+
+
+
 
                                 }
                             });
@@ -141,7 +207,7 @@ public class AddMusic extends AppCompatActivity {
             }
         });
 
-        link.setOnClickListener(new View.OnClickListener() {
+        linktext.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -149,6 +215,18 @@ public class AddMusic extends AppCompatActivity {
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("audio/*");
                 startActivityForResult(Intent.createChooser(intent, "Select Audio"), 20);
+
+            }
+        });
+
+        link.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(Intent.createChooser(intent, "Select Audio"), 100);
 
             }
         });
@@ -168,6 +246,11 @@ public class AddMusic extends AppCompatActivity {
             selected=true;
 
 
+        }
+        if(requestCode==100 & resultCode==RESULT_OK){
+            selectedImage=data.getData();
+            link.setImageURI(selectedImage);
+            isSelected=true;
         }
     }
 }

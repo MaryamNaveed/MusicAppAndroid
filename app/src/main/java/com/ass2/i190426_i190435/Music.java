@@ -11,12 +11,7 @@ public class Music {
         this.image = image;
     }
 
-    public Music(String title, String genre, String description, String link) {
-        this.title = title;
-        this.genre = genre;
-        this.description = description;
-        this.link = link;
-    }
+
 
     public Music() {
     }

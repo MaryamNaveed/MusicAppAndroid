@@ -34,11 +34,14 @@ import java.util.Calendar;
 public class RecordMusic extends AppCompatActivity {
 
     BottomNavigationView mNavigationBottom;
-    ImageView recording;
+    ImageView recording, image;
     MediaRecorder recorder;
     String fileName;
     boolean start=false;
     FirebaseAuth mAuth;
+    Uri selectedImage=null;
+    String img, audio;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +61,15 @@ public class RecordMusic extends AppCompatActivity {
         File file = new File(music, "audio"+c.getTimeInMillis()+".mp3");
         fileName=file.getPath();
 
+        image=findViewById(R.id.image);
+        img = getIntent().getStringExtra("image");
+        selectedImage=Uri.parse(img);
 
-//        fileName = getExternalCacheDir().getAbsolutePath();
-//        fileName += "/audiorecord.mp3";
+        System.out.println("String image: "+img);
+
+        image.setImageURI(selectedImage);
+
+
 
         recording.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +134,7 @@ public class RecordMusic extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(
                         RecordMusic.this,
-                        "Uploaded to storage",
+                        "Uploaded Song to storage",
                         Toast.LENGTH_LONG
                 ).show();
                 Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
@@ -136,24 +145,80 @@ public class RecordMusic extends AppCompatActivity {
                         task.addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                Intent intent=getIntent();
-                                String title = intent.getStringExtra("title");
-                                String genre = intent.getStringExtra("genre");
-                                String description = intent.getStringExtra("description");
-
-                                Music m = new Music(
-                                        title,
-                                        genre,
-                                        description,
-                                        uri.toString()
-                                );
+                                audio=uri.toString();
 
                                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                                 DatabaseReference myRef = database.getReference("music");
+                                FirebaseStorage storage = FirebaseStorage.getInstance();
+                                Calendar c = Calendar.getInstance();
 
+                                StorageReference ref = storage.getReference().child("MusicImages/image"+mAuth.getCurrentUser()+c.getTimeInMillis()+".jpg");
 
-                                DatabaseReference abc = myRef.push();
-                                abc.setValue(m);
+                                ref.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                        Toast.makeText(
+                                                RecordMusic.this,
+                                                "Uploaded Image to storage",
+                                                Toast.LENGTH_LONG
+                                        ).show();
+                                        Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
+                                        task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                            @Override
+                                            public void onSuccess(Uri uri) {
+                                                Intent intent=getIntent();
+                                                String title = intent.getStringExtra("title");
+                                                String genre = intent.getStringExtra("genre");
+                                                String description = intent.getStringExtra("description");
+                                                Toast.makeText(
+                                                        RecordMusic.this,
+                                                        "Uploading to database",
+                                                        Toast.LENGTH_LONG
+                                                ).show();
+
+                                                Music m = new Music(
+                                                        title,
+                                                        genre,
+                                                        description,
+                                                        audio,
+                                                        uri.toString()
+                                                );
+
+                                                DatabaseReference abc = myRef.push();
+                                                abc.setValue(m);
+                                                Toast.makeText(
+                                                        RecordMusic.this,
+                                                        "Added to database",
+                                                        Toast.LENGTH_LONG
+                                                ).show();
+                                            }
+                                        });
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(
+                                                RecordMusic.this,
+                                                "Failed",
+                                                Toast.LENGTH_LONG
+                                        ).show();
+                                    }
+                                });;
+
+//                                Music m = new Music(
+//                                        title,
+//                                        genre,
+//                                        description,
+//                                        uri.toString(),
+//                                        selectedImage.toString()
+//                                );
+//
+//                                FirebaseDatabase database = FirebaseDatabase.getInstance();
+//                                DatabaseReference myRef = database.getReference("music");
+//
+//
+//                                DatabaseReference abc = myRef.push();
+//                                abc.setValue(m);
 
                             }
                         });
@@ -171,30 +236,8 @@ public class RecordMusic extends AppCompatActivity {
                 ).show();
             }
         });
-//        ref.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
-//                task.addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        tv.setText(uri.toString());
-//                        Picasso.get().load(uri.toString()).into(dp);
-//                    }
-//                });
-//                Toast.makeText(
-//                        MainActivity.this,
-//                        "Success",
-//                        Toast.LENGTH_LONG
-//                ).show();;
-//
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//
-//            }
-//        });
+
+
 
     }
 
@@ -210,16 +253,4 @@ public class RecordMusic extends AppCompatActivity {
         }
     }
 
-    //    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-//                                                     @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == 10) {
-//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                recordAudio();
-//            }else{
-//                //User denied Permission.
-//            }
-//        }
-//    }
 }

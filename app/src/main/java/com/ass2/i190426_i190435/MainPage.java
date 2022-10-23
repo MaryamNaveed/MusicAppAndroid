@@ -2,23 +2,35 @@ package com.ass2.i190426_i190435;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainPage extends AppCompatActivity {
 
     TextView logout;
     BottomNavigationView mNavigationBottom;
     FirebaseAuth mAuth;
+    DrawerLayout drawer;
+    ImageView menu;
+    TextView username;
+    CircleImageView dp;
+    TextView edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +40,40 @@ public class MainPage extends AppCompatActivity {
         logout=findViewById(R.id.logout);
         mNavigationBottom=findViewById(R.id.mNavigationBottom);
         mAuth=FirebaseAuth.getInstance();
+
+        menu=findViewById(R.id.menu);
+        drawer=findViewById(R.id.drawer);
+        username=findViewById(R.id.userName);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        username.setText(user.getDisplayName());
+        dp=findViewById(R.id.dp);
+        edit=findViewById(R.id.edit);
+
+        Uri photoUrl = user.getPhotoUrl();
+        System.out.println(photoUrl);
+        if(photoUrl!=null){
+            dp.setImageURI(photoUrl);
+        }
+
+        menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(drawer.isDrawerOpen(Gravity.LEFT)){
+                    drawer.closeDrawer(Gravity.LEFT);
+                }
+                else{
+                    drawer.openDrawer(Gravity.LEFT);
+                }
+            }
+        });
+
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MainPage.this, EditProfile.class);
+                startActivity(intent);
+            }
+        });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,15 +88,7 @@ public class MainPage extends AppCompatActivity {
         }
         mNavigationBottom.getMenu().setGroupCheckable(0, true, true);
 
-//        mNavigationBottom.setOnNavigationItemSelectedListener(item ->
-//        when(item.getItemId()){
-//
-//        });
-//
-////        mNavigationBottom.setOnNavigationItemSelectedListener(
-////                when(item.getItemId()){
-////            R.id.page_1
-////        });
+
 
         mNavigationBottom.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -76,5 +114,13 @@ public class MainPage extends AppCompatActivity {
         });
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mNavigationBottom.getMenu().setGroupCheckable(0, true, false);
+        for (int i=0; i<mNavigationBottom.getMenu().size(); i++) {
+            mNavigationBottom.getMenu().getItem(i).setChecked(false);
+        }
+        mNavigationBottom.getMenu().setGroupCheckable(0, true, true);
+    }
 }
