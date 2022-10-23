@@ -12,6 +12,7 @@ import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -52,6 +54,24 @@ public class RecordMusic extends AppCompatActivity {
         mNavigationBottom=findViewById(R.id.mNavigationBottom);
 
         mNavigationBottom.setSelectedItemId(R.id.page_2);
+
+        mNavigationBottom.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.page_1:
+                        startActivity(new Intent(RecordMusic.this, MainActivity2.class));
+                        break;
+                    case R.id.page_2:
+                        startActivity(new Intent(RecordMusic.this, AddMusic.class));
+                        break;
+                    case R.id.page_3:
+                        startActivity(new Intent(RecordMusic.this, Search.class));
+                        break;
+                }
+                return true;
+            }
+        });
 
         recording=findViewById(R.id.recording);
 

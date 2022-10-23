@@ -33,6 +33,7 @@ public class Search extends AppCompatActivity {
 
     RecyclerView rv;
     List<Music> ls;
+    List<Music> temp;
     MyAdapterMusic adapter;
     EditText search;
     BottomNavigationView mNavigationBottom;
@@ -47,6 +48,7 @@ public class Search extends AppCompatActivity {
         rv=findViewById(R.id.rv);
         search=findViewById(R.id.search);
         ls=new ArrayList<>();
+        temp=new ArrayList<>();
         mNavigationBottom=findViewById(R.id.mNavigationBottom);
 
         //getMusic();
@@ -96,10 +98,10 @@ public class Search extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                  Iterable<DataSnapshot> children = snapshot.getChildren();
-                 ls=new ArrayList<>();
+                 temp=new ArrayList<>();
                  for (DataSnapshot child: children) {
                      Music value = child.getValue(Music.class);
-                     ls.add(value);
+                     temp.add(value);
                  }
 
                  databaseReference.child("music").removeEventListener(valueEventListener);
@@ -153,9 +155,9 @@ public class Search extends AppCompatActivity {
 
                 List<Music> mylist=new ArrayList<>();
 
-                databaseReference.child("music").addValueEventListener(valueEventListener);
+//                databaseReference.child("music").addValueEventListener(valueEventListener);
 
-                for( Music m: ls){
+                for( Music m: temp){
                     System.out.println(m.title.toLowerCase()+ "       "+ searchText.toLowerCase(Locale.ROOT));
 
                     if(m.title.toLowerCase().contains(searchText.toLowerCase()) ){
@@ -193,13 +195,13 @@ public class Search extends AppCompatActivity {
     }
 
     public void starting() {
-        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("music").addValueEventListener(valueEventListener);
+//        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference();
+//        databaseReference.child("music").addValueEventListener(valueEventListener);
 
 
         List<Music> mylist=new ArrayList<>();
 
-        for(Music m: ls){
+        for(Music m: temp){
             if(m.title.toLowerCase().contains(searchText.toLowerCase()) ){
                 System.out.println("contain");
 
@@ -224,5 +226,32 @@ public class Search extends AppCompatActivity {
         System.out.println(adapter.getItemCount());
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        valueEventListener=new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                temp=new ArrayList<>();
+                for (DataSnapshot child: children) {
+                    Music value = child.getValue(Music.class);
+                    temp.add(value);
+                }
+
+                databaseReference.child("music").removeEventListener(valueEventListener);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        databaseReference.child("music").addValueEventListener(valueEventListener);
     }
 }

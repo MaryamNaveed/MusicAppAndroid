@@ -617,7 +617,7 @@
                     app:labelVisibilityMode="labeled"
                     app:itemBackground="@drawable/bg_color_tab"
                     app:menu="@menu/bottom_navigation_menu">
-<!--                    app:menu="@menu/bottom_navigation_menu"-->
+
 
 
                 </com.google.android.material.bottomnavigation.BottomNavigationView>

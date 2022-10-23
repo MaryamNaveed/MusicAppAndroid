@@ -148,9 +148,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/roundedtextfield"
+                    android:hint="Password"
                     android:inputType="textPassword"
                     android:padding="15dp"
-                    android:hint="New Password"
                     android:textColor="#FFC107"
                     android:textColorHint="#FFC107"
                     android:textSize="20dp">
