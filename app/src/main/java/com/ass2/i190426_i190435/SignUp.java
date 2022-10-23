@@ -167,6 +167,10 @@ public class SignUp extends AppCompatActivity {
                             Toast.makeText(SignUp.this,
                                     "Failed",
                                     Toast.LENGTH_LONG).show();
+
+                            Toast.makeText(SignUp.this,
+                                    e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
                     });
                 }

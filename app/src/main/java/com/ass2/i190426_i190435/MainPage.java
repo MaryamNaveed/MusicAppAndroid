@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -18,6 +21,11 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.squareup.picasso.Picasso;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -31,6 +39,7 @@ public class MainPage extends AppCompatActivity {
     TextView username;
     CircleImageView dp;
     TextView edit;
+    Uri photoUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +58,25 @@ public class MainPage extends AppCompatActivity {
         dp=findViewById(R.id.dp);
         edit=findViewById(R.id.edit);
 
-        Uri photoUrl = user.getPhotoUrl();
-        System.out.println(photoUrl);
-        if(photoUrl!=null){
-            dp.setImageURI(photoUrl);
+//        Uri photoUrl = user.getPhotoUrl();
+//        System.out.println(photoUrl);
+//        if(photoUrl!=null){
+//            dp.setImageURI(photoUrl);
+//        }
+
+        if (user != null) {
+
+
+
+            photoUrl = user.getProviderData().get(0).getPhotoUrl();
+
+            Picasso.get().load(photoUrl.toString()).into(dp);
+
+
+
+//            Picasso.get().load(uri.toString()).into(dp);
+
+
         }
 
         menu.setOnClickListener(new View.OnClickListener() {
