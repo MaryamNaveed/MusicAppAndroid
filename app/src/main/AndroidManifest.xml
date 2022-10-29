@@ -65,6 +65,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <receiver android:name=".NotificationServiceMusic" />
+        <service android:name=".ServiceMusic"/>
     </application>
 
 </manifest>

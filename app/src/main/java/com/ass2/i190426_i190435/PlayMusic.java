@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -28,7 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayMusic extends AppCompatActivity {
+public class PlayMusic extends AppCompatActivity implements Play {
 
     TextView title;
     ImageView image;
@@ -99,6 +102,8 @@ public class PlayMusic extends AppCompatActivity {
                 play.setImageResource(R.drawable.play);
                 isPause=true;
                 pauseLength=0;
+                CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+                        R.drawable.play, position, ls.size()-1);
 
             }
         });
@@ -204,6 +209,8 @@ public class PlayMusic extends AppCompatActivity {
             if (notificationManager != null){
                 notificationManager.createNotificationChannel(channel);
             }
+            registerReceiver(broadcastReceiver, new IntentFilter("TRACKS_TRACKS"));
+            startService(new Intent(getBaseContext(), ServiceMusic.class));
 
         }
 
@@ -247,4 +254,75 @@ public class PlayMusic extends AppCompatActivity {
             Toast.makeText(PlayMusic.this, "error", Toast.LENGTH_LONG).show();
         }
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getExtras().getString("actionname");
+
+            switch (action){
+                case CreateNotificationMusic.PREV:
+                    onPrevious();
+                    break;
+                case CreateNotificationMusic.PLAY:
+                    if (isPause){
+                        onPlayMusic();
+                    } else {
+                        onPauseMusic();
+
+                    }
+                    break;
+                case CreateNotificationMusic.NEXT:
+                    onNext();
+                    break;
+            }
+        }
+    };
+
+    @Override
+    public void onPrevious() {
+
+        position=position-1;
+        CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+                R.drawable.music_note, position, ls.size()-1);
+        title.setText(ls.get(position).getTitle());
+        playMusic();
+
+    }
+
+    @Override
+    public void onPlayMusic() {
+        CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+                R.drawable.pause, position, ls.size()-1);
+        play.setImageResource(R.drawable.pause);
+        title.setText(ls.get(position).getTitle());
+        isPause=false;
+        mediaPlayer.seekTo(pauseLength);
+        mediaPlayer.start();
+
+    }
+
+    @Override
+    public void onPauseMusic() {
+        CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+                R.drawable.play, position, ls.size()-1);
+        play.setImageResource(R.drawable.play);
+        title.setText(ls.get(position).getTitle());
+        mediaPlayer.pause();
+        pauseLength=mediaPlayer.getCurrentPosition();
+        isPause=true;
+
+    }
+
+    @Override
+    public void onNext() {
+        position=position+1;
+        CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+                R.drawable.music_note, position, ls.size()-1);
+        title.setText(ls.get(position).getTitle());
+        playMusic();
+
+    }
+
+
 }
