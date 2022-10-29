@@ -39,7 +39,7 @@ public class EditProfile extends AppCompatActivity {
     BottomNavigationView mNavigationBottom;
     FirebaseAuth mAuth;
     EditText newemail, newpassword, prevemail, prevpassword;
-    TextView show, save, show1;
+    TextView show, save, show1, username;
     boolean showed = false, showed1 = false;
     Uri photoUrl;
     Uri selectedImage;
@@ -58,7 +58,10 @@ public class EditProfile extends AppCompatActivity {
         show1=findViewById(R.id.show1);
         save = findViewById(R.id.save);
         profile = findViewById(R.id.profile);
+        username=findViewById(R.id.username);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        username.setText(user.getDisplayName());
+
 
         newpassword=findViewById(R.id.newpassword);
 
@@ -137,10 +140,12 @@ public class EditProfile extends AppCompatActivity {
             }
         });
 
+
         save.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+                String em = prevemail.getText().toString().replace(".","");
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                 AuthCredential credential = EmailAuthProvider
                         .getCredential(prevemail.getText().toString(), prevpassword.getText().toString());
@@ -191,9 +196,37 @@ public class EditProfile extends AppCompatActivity {
                                                                                         @Override
                                                                                         public void onComplete(@NonNull Task<Void> task) {
                                                                                             if (task.isSuccessful()) {
-                                                                                                Toast.makeText(EditProfile.this,
-                                                                                                        "Profile updated",
-                                                                                                        Toast.LENGTH_LONG).show();
+                                                                                                DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference();
+                                                                                                ref1.child("user").child(em).child("dp")
+                                                                                                        .setValue(uri.toString())
+                                                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                                            @Override
+                                                                                                            public void onSuccess(Void unused) {
+                                                                                                                DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference();
+                                                                                                                ref1.child("user").child(em).child("email")
+                                                                                                                        .setValue(newemail.getText().toString())
+                                                                                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                                                                    @Override
+                                                                                                                                    public void onSuccess(Void unused) {
+                                                                                                                                        Toast.makeText(EditProfile.this,
+                                                                                                                                                "Profile updated in database",
+                                                                                                                                                Toast.LENGTH_LONG).show();
+                                                                                                                                        startActivity(new Intent(EditProfile.this,MainPage.class));
+
+                                                                                                                                    }
+                                                                                                                                });
+
+
+                                                                                                            }
+                                                                                                        }).addOnFailureListener(new OnFailureListener() {
+                                                                                                            @Override
+                                                                                                            public void onFailure(@NonNull Exception e) {
+                                                                                                                Toast.makeText(EditProfile.this,
+                                                                                                                        "Error",
+                                                                                                                        Toast.LENGTH_LONG).show();
+                                                                                                            }
+                                                                                                        });
+
 
                                                                                             }
                                                                                         }
@@ -202,6 +235,22 @@ public class EditProfile extends AppCompatActivity {
                                                                             });
                                                                         }
                                                                     });
+
+                                                                }
+                                                                else{
+                                                                    DatabaseReference ref1 = FirebaseDatabase.getInstance().getReference();
+                                                                    ref1.child("user").child(em).child("email")
+                                                                            .setValue(newemail.getText().toString())
+                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                @Override
+                                                                                public void onSuccess(Void unused) {
+                                                                                    Toast.makeText(EditProfile.this,
+                                                                                            "Profile updated in database",
+                                                                                            Toast.LENGTH_LONG).show();
+                                                                                    startActivity(new Intent(EditProfile.this,MainPage.class));
+
+                                                                                }
+                                                                            });
 
                                                                 }
 
@@ -259,6 +308,7 @@ public class EditProfile extends AppCompatActivity {
 
             }
         });
+
 
 
     }

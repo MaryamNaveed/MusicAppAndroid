@@ -40,7 +40,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class SignUp extends AppCompatActivity {
 
     TextView signin, show;
-    String gender;
+    String gender="";
     ImageView male,female,prefernottosay;
     EditText name,email, password;
     Button signup;
@@ -65,6 +65,34 @@ public class SignUp extends AppCompatActivity {
         email=findViewById(R.id.email);
         password=findViewById(R.id.password);
         dp = findViewById(R.id.dp);
+
+        male.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gender="male";
+                male.setImageResource(R.drawable.male);
+                female.setImageResource(R.drawable.female1);
+                prefernottosay.setImageResource(R.drawable.nottosay1);
+            }
+        });
+        female.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gender="female";
+                male.setImageResource(R.drawable.male1);
+                female.setImageResource(R.drawable.female);
+                prefernottosay.setImageResource(R.drawable.nottosay1);
+            }
+        });
+        prefernottosay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gender="";
+                male.setImageResource(R.drawable.male1);
+                female.setImageResource(R.drawable.female1);
+                prefernottosay.setImageResource(R.drawable.nottosay);
+            }
+        });
 
         signin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +144,7 @@ public class SignUp extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Uri uri) {
 
-                                          User m = new User(name.getText().toString(), uri.toString(), email.getText().toString());
+                                          User m = new User(mAuth.getCurrentUser().getUid().toString(), name.getText().toString(), uri.toString(), email.getText().toString(), gender);
 
 
                                             DatabaseReference abc = myRef.push();

@@ -1,12 +1,22 @@
 package com.ass2.i190426_i190435;
 
 public class User {
-    String name, dp, email;
+    String id, name, dp, email, gender;
 
-    public User(String name, String dp, String email) {
+    public User(String id, String name, String dp, String email, String gender) {
+        this.id=id;
         this.name = name;
         this.dp = dp;
         this.email = email;
+        this.gender = gender;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public User() {

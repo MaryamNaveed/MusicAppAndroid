@@ -77,7 +77,6 @@ public class MainPage extends AppCompatActivity {
         temp=new ArrayList<>();
 
 
-
         adapterHorizontalMusic=new MyAdapterHorizontalMusic(ls, MainPage.this);
         rv.setAdapter(adapterHorizontalMusic);
         RecyclerView.LayoutManager lm=new LinearLayoutManager(MainPage.this, LinearLayoutManager.HORIZONTAL, false);
@@ -103,13 +102,13 @@ public class MainPage extends AppCompatActivity {
             }
         });
 
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(MainPage.this, EditProfile.class);
-                startActivity(intent);
-            }
-        });
+//        edit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent=new Intent(MainPage.this, EditProfile.class);
+//                startActivity(intent);
+//            }
+//        });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
