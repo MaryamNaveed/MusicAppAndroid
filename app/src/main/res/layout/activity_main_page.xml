@@ -52,12 +52,13 @@
                     android:layout_height="match_parent"
                     android:layout_weight=".2">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profileImage"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:src="@drawable/user">
 
-                    </ImageView>
+                    </de.hdodenhof.circleimageview.CircleImageView>
 
                 </LinearLayout>
 
@@ -66,7 +67,17 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".02">
+                android:layout_weight=".08"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chat App"
+                    android:textColor="#FFC107">
+
+                </TextView>
+
 
             </LinearLayout>
 
@@ -375,14 +386,14 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".05">
+                android:layout_weight=".03">
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight=".08"
+                android:layout_weight=".05"
                 android:orientation="horizontal"
                 android:weightSum="1"></LinearLayout>
 
@@ -702,7 +713,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingLeft="10dp"
-                    android:text="Edit Profile"
+                    android:text=""
                     android:textColor="#FFC107"
                     android:textStyle="bold" />
 

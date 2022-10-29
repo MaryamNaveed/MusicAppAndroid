@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, MainPage.class));
                 }
                 else{
-                    Intent intent= new Intent(MainActivity.this, CreateAccount.class);
+                    Intent intent= new Intent(MainActivity.this, TabLayout.class);
                     startActivity(intent);
                 }
 

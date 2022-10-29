@@ -47,7 +47,7 @@ public class MainPage extends AppCompatActivity {
     DrawerLayout drawer;
     ImageView menu;
     TextView username;
-    CircleImageView dp;
+    CircleImageView dp, profileImage;
     TextView edit;
     Uri photoUrl;
     RecyclerView rv;
@@ -73,6 +73,7 @@ public class MainPage extends AppCompatActivity {
         dp=findViewById(R.id.dp);
         edit=findViewById(R.id.edit);
         rv = findViewById(R.id.rv);
+        profileImage=findViewById(R.id.profileImage);
         ls=new ArrayList<>();
         temp=new ArrayList<>();
 
@@ -88,6 +89,7 @@ public class MainPage extends AppCompatActivity {
         if (user != null) {
             photoUrl = user.getProviderData().get(0).getPhotoUrl();
             Picasso.get().load(photoUrl.toString()).into(dp);
+            Picasso.get().load(photoUrl.toString()).into(profileImage);
         }
 
         menu.setOnClickListener(new View.OnClickListener() {
@@ -181,7 +183,7 @@ public class MainPage extends AppCompatActivity {
                 adapterHorizontalMusic.notifyDataSetChanged();
 
                 rv.setAdapter(adapterHorizontalMusic);
-                RecyclerView.LayoutManager lm=new LinearLayoutManager(MainPage.this, LinearLayoutManager.HORIZONTAL, true);
+                RecyclerView.LayoutManager lm=new LinearLayoutManager(MainPage.this, LinearLayoutManager.HORIZONTAL, false);
                 rv.setLayoutManager(lm);
                 System.out.println("Size is: "+ls.size());
 //                Toast.makeText(MainPage.this, ls.size()+"", Toast.LENGTH_SHORT).show();
@@ -221,7 +223,7 @@ public class MainPage extends AppCompatActivity {
                 adapterHorizontalMusic.notifyDataSetChanged();
 
                 rv.setAdapter(adapterHorizontalMusic);
-                RecyclerView.LayoutManager lm=new LinearLayoutManager(MainPage.this, LinearLayoutManager.HORIZONTAL, true);
+                RecyclerView.LayoutManager lm=new LinearLayoutManager(MainPage.this, LinearLayoutManager.HORIZONTAL, false);
                 rv.setLayoutManager(lm);
                 System.out.println("Size is: "+ls.size());
 //                Toast.makeText(MainPage.this, ls.size()+"", Toast.LENGTH_SHORT).show();
