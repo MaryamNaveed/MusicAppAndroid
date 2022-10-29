@@ -3,6 +3,7 @@ package com.ass2.i190426_i190435;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyAdapterHorizontalMusic extends RecyclerView.Adapter<MyAdapterHorizontalMusic.MyViewHolder> {
@@ -47,6 +50,10 @@ public class MyAdapterHorizontalMusic extends RecyclerView.Adapter<MyAdapterHori
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(c, PlayMusic.class);
+
+                UtilityClassMusic.getInstance().setList(ls);
+                intent.putExtra("position", position);
+
                 intent.putExtra("title",ls.get(position).getTitle());
                 intent.putExtra("genre", ls.get(position).getGenre());
                 intent.putExtra("description", ls.get(position).getDescription());
@@ -62,6 +69,10 @@ public class MyAdapterHorizontalMusic extends RecyclerView.Adapter<MyAdapterHori
             @Override
             public void onClick(View view) {
                 Intent intent=new Intent(c, PlayMusic.class);
+
+                UtilityClassMusic.getInstance().setList(ls);
+                intent.putExtra("position", position);
+
                 intent.putExtra("title",ls.get(position).getTitle());
                 intent.putExtra("genre", ls.get(position).getGenre());
                 intent.putExtra("description", ls.get(position).getDescription());

@@ -8,7 +8,9 @@ import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -19,6 +21,8 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlayMusic extends AppCompatActivity {
 
@@ -30,6 +34,12 @@ public class PlayMusic extends AppCompatActivity {
     String songurl;
     MediaPlayer mediaPlayer = new MediaPlayer();
     SeekBar seekBar;
+    ImageView play, next, prev;
+    boolean isPause=false;
+    int pauseLength=0;
+    List<Music> ls;
+    int position=0;
+    Uri myUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,34 +49,71 @@ public class PlayMusic extends AppCompatActivity {
         title=findViewById(R.id.title);
         image=findViewById(R.id.image);
         seekBar=findViewById(R.id.seekbar);
+        play=findViewById(R.id.play);
+        next=findViewById(R.id.next);
+        prev=findViewById(R.id.prev);
 
-        songtitle=getIntent().getStringExtra("title");
-        songimage = getIntent().getStringExtra("image");
-        songurl = getIntent().getStringExtra("link");
+        ls= UtilityClassMusic.getInstance().getList();
+        position=getIntent().getIntExtra("position", position);
 
 
-        Picasso.get().load(songimage).into(image);
 
-        title.setText(songtitle);
 
-        Uri myUri = Uri.parse(songurl); // initialize Uri here
+        playMusic();
 
-        mediaPlayer.setAudioAttributes(
-                new AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .setUsage(AudioAttributes.USAGE_MEDIA)
-                        .build()
-        );
-        try {
-            mediaPlayer.setDataSource(getApplicationContext(), myUri);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-            Toast.makeText(PlayMusic.this, "started", Toast.LENGTH_LONG).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(PlayMusic.this, "error", Toast.LENGTH_LONG).show();
-        }
+        play.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isPause){
+                    mediaPlayer.seekTo(pauseLength);
+                    mediaPlayer.start();
+                    isPause=false;
+                    play.setImageResource(R.drawable.pause);
+                }
+                else{
+                    mediaPlayer.pause();
+                    pauseLength=mediaPlayer.getCurrentPosition();
+                    isPause=true;
+                    play.setImageResource(R.drawable.play);
+                }
 
+            }
+        });
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                play.setImageResource(R.drawable.play);
+                isPause=true;
+                pauseLength=0;
+
+            }
+        });
+
+        prev.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                position=position-1;
+                pauseLength=0;
+                if(position<0){
+                    position=0;
+                }
+                playMusic();
+
+            }
+        });
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                position=position+1;
+                pauseLength=0;
+                if(position>=ls.size()){
+                    position=ls.size()-1;
+                }
+                playMusic();
+            }
+        });
 
 
         mNavigationBottom=findViewById(R.id.mNavigationBottom);
@@ -95,5 +142,40 @@ public class PlayMusic extends AppCompatActivity {
                 return true;
             }
         });
+
+
+    }
+
+    public void playMusic(){
+
+        pauseLength=0;
+        mediaPlayer.reset();
+        mediaPlayer.setAudioAttributes(
+                new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+        );
+
+        songtitle=ls.get(position).getTitle();
+        songimage = ls.get(position).getImage();
+        songurl = ls.get(position).getLink();
+
+        Picasso.get().load(songimage).into(image);
+
+        title.setText(songtitle);
+
+        myUri = Uri.parse(songurl);
+        System.out.println(songurl+ " "+position);
+
+        try {
+            mediaPlayer.setDataSource(getApplicationContext(), myUri);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+            Toast.makeText(PlayMusic.this, "started", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(PlayMusic.this, "error", Toast.LENGTH_LONG).show();
+        }
     }
 }

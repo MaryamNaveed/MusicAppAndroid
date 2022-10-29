@@ -1,6 +1,7 @@
 package com.ass2.i190426_i190435;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,65 @@ public class MyAdapterMusic extends RecyclerView.Adapter<MyAdapterMusic.MyViewHo
         holder.genre.setText(ls.get(position).getGenre());
 
         Picasso.get().load(ls.get(position).getImage()).into(holder.image);
+
+        holder.title.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(c, PlayMusic.class);
+
+                UtilityClassMusic.getInstance().setList(ls);
+                intent.putExtra("position", position);
+
+                intent.putExtra("title",ls.get(position).getTitle());
+                intent.putExtra("genre", ls.get(position).getGenre());
+                intent.putExtra("description", ls.get(position).getDescription());
+                intent.putExtra("image", ls.get(position).getImage());
+                intent.putExtra("link", ls.get(position).getLink());
+
+                c.startActivity(intent);
+
+            }
+        });
+        holder.genre.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(c, PlayMusic.class);
+
+
+
+                UtilityClassMusic.getInstance().setList(ls);
+                intent.putExtra("position", position);
+
+                intent.putExtra("title",ls.get(position).getTitle());
+                intent.putExtra("genre", ls.get(position).getGenre());
+                intent.putExtra("description", ls.get(position).getDescription());
+                intent.putExtra("image", ls.get(position).getImage());
+                intent.putExtra("link", ls.get(position).getLink());
+
+                c.startActivity(intent);
+
+            }
+        });
+        holder.image.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(c, PlayMusic.class);
+
+                UtilityClassMusic.getInstance().setList(ls);
+                intent.putExtra("position", position);
+
+                intent.putExtra("title",ls.get(position).getTitle());
+                intent.putExtra("genre", ls.get(position).getGenre());
+                intent.putExtra("description", ls.get(position).getDescription());
+                intent.putExtra("image", ls.get(position).getImage());
+                intent.putExtra("link", ls.get(position).getLink());
+                c.startActivity(intent);
+
+            }
+        });
 
         System.out.println(ls.get(position).getGenre());
 
