@@ -43,6 +43,8 @@ import java.util.List;
 
 public class PlayMusic extends AppCompatActivity implements Play {
 
+
+    int position=0;
     TextView title;
     ImageView image, listenLater, like;
     String songtitle;
@@ -55,12 +57,14 @@ public class PlayMusic extends AppCompatActivity implements Play {
     boolean isPause=false;
     int pauseLength=0;
     List<Music> ls;
-    int position=0;
     Uri myUri;
     int songDuration;
     private Handler mHandler = new Handler();
     NotificationManager notificationManager;
     boolean foundLike, foundListen = false;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +85,9 @@ public class PlayMusic extends AppCompatActivity implements Play {
         position=getIntent().getIntExtra("position", position);
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+
+        playMusic();
 
 
         Query query = ref.child("like").orderByChild("link").equalTo(ls.get(position).getLink());
@@ -246,7 +253,6 @@ public class PlayMusic extends AppCompatActivity implements Play {
 
 
 
-        playMusic();
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,10 +297,13 @@ public class PlayMusic extends AppCompatActivity implements Play {
                 isPause=false;
                 play.setImageResource(R.drawable.pause);
                 position=position-1;
-                pauseLength=0;
                 if(position<0){
                     position=0;
                 }
+                pauseLength=0;
+                CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+                        R.drawable.music_note, position, ls.size()-1);
+
                 playMusic();
 
             }
@@ -306,10 +315,13 @@ public class PlayMusic extends AppCompatActivity implements Play {
                 isPause=false;
                 play.setImageResource(R.drawable.pause);
                 position=position+1;
-                pauseLength=0;
                 if(position>=ls.size()){
                     position=ls.size()-1;
                 }
+                pauseLength=0;
+                CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+                        R.drawable.music_note, position, ls.size()-1);
+
                 playMusic();
             }
         });
@@ -400,6 +412,9 @@ public class PlayMusic extends AppCompatActivity implements Play {
 
         pauseLength=0;
 
+        if(mediaPlayer.isPlaying()){
+            mediaPlayer.stop();
+        }
 
 
 
@@ -465,6 +480,9 @@ public class PlayMusic extends AppCompatActivity implements Play {
     public void onPrevious() {
 
         position=position-1;
+        if(position<0){
+            position=0;
+        }
         CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
                 R.drawable.music_note, position, ls.size()-1);
         title.setText(ls.get(position).getTitle());
@@ -499,6 +517,9 @@ public class PlayMusic extends AppCompatActivity implements Play {
     @Override
     public void onNext() {
         position=position+1;
+        if(position>=ls.size()){
+            position=ls.size()-1;
+        }
         CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
                 R.drawable.music_note, position, ls.size()-1);
         title.setText(ls.get(position).getTitle());
@@ -509,6 +530,7 @@ public class PlayMusic extends AppCompatActivity implements Play {
     @Override
     protected void onResume() {
         super.onResume();
+
         mNavigationBottom.getMenu().setGroupCheckable(0, true, false);
         for (int i=0; i<mNavigationBottom.getMenu().size(); i++) {
             mNavigationBottom.getMenu().getItem(i).setChecked(false);
