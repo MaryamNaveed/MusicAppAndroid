@@ -68,12 +68,14 @@ public class AddMusic extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.page_1:
-                        startActivity(new Intent(AddMusic.this, MainActivity2.class));
+                        startActivity(new Intent(AddMusic.this, LikedMusic.class));
                         break;
 
                     case R.id.page_3:
                         startActivity(new Intent(AddMusic.this, Search.class));
                         break;
+                    case R.id.page_4:
+                        startActivity(new Intent(AddMusic.this,ListenLaterMusic.class));
                 }
                 return true;
             }
@@ -252,7 +254,11 @@ public class AddMusic extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mNavigationBottom.setSelectedItemId(R.id.page_2);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

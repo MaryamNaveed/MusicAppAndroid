@@ -100,7 +100,7 @@ public class EditProfile extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.page_1:
-                        startActivity(new Intent(EditProfile.this, MainActivity2.class));
+                        startActivity(new Intent(EditProfile.this, LikedMusic.class));
                         break;
                     case R.id.page_2:
                         startActivity(new Intent(EditProfile.this, AddMusic.class));

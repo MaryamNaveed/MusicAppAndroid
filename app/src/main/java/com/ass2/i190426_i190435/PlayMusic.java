@@ -2,13 +2,17 @@ package com.ass2.i190426_i190435;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.ImageViewCompat;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -25,6 +29,12 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -34,7 +44,7 @@ import java.util.List;
 public class PlayMusic extends AppCompatActivity implements Play {
 
     TextView title;
-    ImageView image;
+    ImageView image, listenLater, like;
     String songtitle;
     BottomNavigationView mNavigationBottom;
     String songimage;
@@ -50,6 +60,7 @@ public class PlayMusic extends AppCompatActivity implements Play {
     int songDuration;
     private Handler mHandler = new Handler();
     NotificationManager notificationManager;
+    boolean foundLike, foundListen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +73,175 @@ public class PlayMusic extends AppCompatActivity implements Play {
         play=findViewById(R.id.play);
         next=findViewById(R.id.next);
         prev=findViewById(R.id.prev);
+        like=findViewById(R.id.like);
+        listenLater=findViewById(R.id.listenLater);
+
 
         ls= UtilityClassMusic.getInstance().getList();
         position=getIntent().getIntExtra("position", position);
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+
+        Query query = ref.child("like").orderByChild("link").equalTo(ls.get(position).getLink());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    foundLike = true;
+                    like.setColorFilter(R.color.grey);
+
+
+                }
+
+                if(foundLike==false) {
+                    like.setColorFilter(Color.rgb(255,255,255));
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        Query query1 = ref.child("listenLater").orderByChild("link").equalTo(ls.get(position).getLink());
+
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    foundListen = true;
+                    listenLater.setColorFilter(R.color.grey);
+
+
+                }
+
+                if(foundListen==false) {
+                    listenLater.setColorFilter(Color.rgb(255,255,255));
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        like.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceAsColor")
+            @Override
+            public void onClick(View view) {
+
+//                ImageViewCompat.setImageTintList(like, ColorStateList.valueOf(R.color.white));
+
+
+
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+                String link=ls.get(position).getLink();
+
+                Query query = ref.child("like").orderByChild("link").equalTo(ls.get(position).getLink());
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+
+                            foundLike = true;
+                            like.setColorFilter(Color.rgb(255,255,255));
+                            appleSnapshot.getRef().removeValue();
+                            Toast.makeText(PlayMusic.this, "Removed Successfully from Like", Toast.LENGTH_SHORT).show();
+
+
+                        }
+
+                        if(foundLike==false){
+                            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("like");
+                            like.setColorFilter(R.color.grey);
+                            Music m = new Music(
+                                    ls.get(position).getTitle(),
+                                    ls.get(position).getGenre(),
+                                    ls.get(position).getDescription(),
+                                    ls.get(position).getLink(),
+                                    ls.get(position).getImage()
+                            );
+
+                            DatabaseReference abc = myRef.push();
+                            abc.setValue(m);
+                            Toast.makeText(PlayMusic.this, "Added Successfully to Like", Toast.LENGTH_SHORT).show();
+
+                        }
+                        else{
+                            foundLike=false;
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(PlayMusic.this, "error", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
+
+
+            }
+        });
+        listenLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Query query1 = ref.child("listenLater").orderByChild("link").equalTo(ls.get(position).getLink());
+
+                query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                            foundListen = true;
+                            listenLater.setColorFilter(Color.rgb(255, 255, 255));
+                            appleSnapshot.getRef().removeValue();
+                            Toast.makeText(PlayMusic.this, "Removed Successfully from Listen Later", Toast.LENGTH_SHORT).show();
+
+
+                        }
+
+                        if(foundListen==false) {
+                            DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("listenLater");
+
+                            Music m = new Music(
+                                    ls.get(position).getTitle(),
+                                    ls.get(position).getGenre(),
+                                    ls.get(position).getDescription(),
+                                    ls.get(position).getLink(),
+                                    ls.get(position).getImage()
+                            );
+
+                            DatabaseReference abc = myRef.push();
+                            abc.setValue(m);
+                            Toast.makeText(PlayMusic.this, "Added Successfully to Listen Later", Toast.LENGTH_SHORT).show();
+
+                            listenLater.setColorFilter(R.color.grey);
+
+                        }
+                        else {
+                            foundListen=false;
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        });
 
 
 
@@ -152,7 +329,7 @@ public class PlayMusic extends AppCompatActivity implements Play {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.page_1:
-                        startActivity(new Intent(PlayMusic.this, MainActivity2.class));
+                        startActivity(new Intent(PlayMusic.this, LikedMusic.class));
                         break;
                     case R.id.page_2:
                         startActivity(new Intent(PlayMusic.this, AddMusic.class));
@@ -160,6 +337,8 @@ public class PlayMusic extends AppCompatActivity implements Play {
                     case R.id.page_3:
                         startActivity(new Intent(PlayMusic.this, Search.class));
                         break;
+                    case R.id.page_4:
+                        startActivity(new Intent(PlayMusic.this, ListenLaterMusic.class));
                 }
                 return true;
             }
@@ -220,6 +399,9 @@ public class PlayMusic extends AppCompatActivity implements Play {
     public void playMusic(){
 
         pauseLength=0;
+
+
+
 
         mediaPlayer.reset();
         mediaPlayer.setAudioAttributes(
@@ -324,5 +506,14 @@ public class PlayMusic extends AppCompatActivity implements Play {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mNavigationBottom.getMenu().setGroupCheckable(0, true, false);
+        for (int i=0; i<mNavigationBottom.getMenu().size(); i++) {
+            mNavigationBottom.getMenu().getItem(i).setChecked(false);
+        }
+        mNavigationBottom.getMenu().setGroupCheckable(0, true, true);
 
+    }
 }

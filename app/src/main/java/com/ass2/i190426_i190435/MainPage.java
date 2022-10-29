@@ -130,13 +130,16 @@ public class MainPage extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.page_1:
-                        startActivity(new Intent(MainPage.this, MainActivity2.class));
+                        startActivity(new Intent(MainPage.this, LikedMusic.class));
                         break;
                     case R.id.page_2:
                         startActivity(new Intent(MainPage.this, AddMusic.class));
                         break;
                     case R.id.page_3:
                         startActivity(new Intent(MainPage.this, Search.class));
+                        break;
+                    case R.id.page_4:
+                        startActivity(new Intent(MainPage.this, ListenLaterMusic.class));
                         break;
                 }
                 return true;
@@ -201,6 +204,7 @@ public class MainPage extends AppCompatActivity {
     public void starting() {
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
 
         valueEventListener=new ValueEventListener() {
             @Override

@@ -69,9 +69,67 @@ public class MyAdapterMusic extends RecyclerView.Adapter<MyAdapterMusic.MyViewHo
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
                             appleSnapshot.getRef().removeValue();
+                            Toast.makeText(c, "Deleted Successfully from Music", Toast.LENGTH_SHORT).show();
                         }
 
-                        Toast.makeText(c, "Deleted Succesfully from database", Toast.LENGTH_SHORT).show();
+
+
+                        Query query = ref.child("like").orderByChild("link").equalTo(link);
+
+
+
+
+
+
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                                    appleSnapshot.getRef().removeValue();
+                                    Toast.makeText(c, "Deleted Successfully from Liked Music", Toast.LENGTH_SHORT).show();
+
+                                }
+
+
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(c, "error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        Query query1 = ref.child("listenLater").orderByChild("link").equalTo(link);
+
+
+
+
+
+
+                        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                                    appleSnapshot.getRef().removeValue();
+                                    Toast.makeText(c, "Deleted Successfully from Listen Later", Toast.LENGTH_SHORT).show();
+
+
+                                }
+
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(c, "error", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        c.startActivity(new Intent(c, MainPage.class));
+
 
 
 

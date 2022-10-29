@@ -72,13 +72,16 @@ public class RecordMusic extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.page_1:
-                        startActivity(new Intent(RecordMusic.this, MainActivity2.class));
+                        startActivity(new Intent(RecordMusic.this, LikedMusic.class));
                         break;
                     case R.id.page_2:
                         startActivity(new Intent(RecordMusic.this, AddMusic.class));
                         break;
                     case R.id.page_3:
                         startActivity(new Intent(RecordMusic.this, Search.class));
+                        break;
+                    case R.id.page_4:
+                        startActivity(new Intent(RecordMusic.this, ListenLaterMusic.class));
                         break;
                 }
                 return true;
@@ -354,5 +357,6 @@ public class RecordMusic extends AppCompatActivity {
             Toast.makeText(RecordMusic.this, "error", Toast.LENGTH_LONG).show();
         }
     }
+
 
 }
