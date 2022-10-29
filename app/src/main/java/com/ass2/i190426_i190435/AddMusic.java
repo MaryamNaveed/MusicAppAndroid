@@ -148,6 +148,7 @@ public class AddMusic extends AppCompatActivity {
 
                                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                                     DatabaseReference myRef = database.getReference("music");
+                                    myRef.keepSynced(true);
                                     FirebaseStorage storage = FirebaseStorage.getInstance();
                                     Calendar c = Calendar.getInstance();
 

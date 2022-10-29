@@ -3,10 +3,13 @@ package com.ass2.i190426_i190435;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -43,6 +46,7 @@ public class PlayMusic extends AppCompatActivity {
     Uri myUri;
     int songDuration;
     private Handler mHandler = new Handler();
+    NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +72,18 @@ public class PlayMusic extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(isPause){
+                    CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+                            R.drawable.pause, position, ls.size()-1);
+
                     mediaPlayer.seekTo(pauseLength);
                     mediaPlayer.start();
                     isPause=false;
                     play.setImageResource(R.drawable.pause);
                 }
                 else{
+                    CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+                            R.drawable.play, position, ls.size()-1);
+
                     mediaPlayer.pause();
                     pauseLength=mediaPlayer.getCurrentPosition();
                     isPause=true;
@@ -152,6 +162,7 @@ public class PlayMusic extends AppCompatActivity {
 
 
 
+
         PlayMusic.this.runOnUiThread(new Runnable() {
 
             @Override
@@ -186,6 +197,16 @@ public class PlayMusic extends AppCompatActivity {
             }
         });
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel(CreateNotificationMusic.CHANNEL_ID,
+                    "Name", NotificationManager.IMPORTANCE_LOW);
+            notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null){
+                notificationManager.createNotificationChannel(channel);
+            }
+
+        }
+
 
     }
 
@@ -204,12 +225,15 @@ public class PlayMusic extends AppCompatActivity {
         songtitle=ls.get(position).getTitle();
         songimage = ls.get(position).getImage();
         songurl = ls.get(position).getLink();
+        myUri = Uri.parse(songurl);
 
         Picasso.get().load(songimage).into(image);
 
         title.setText(songtitle);
+        CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+                R.drawable.pause, position, ls.size()-1);
 
-        myUri = Uri.parse(songurl);
+
         System.out.println(songurl+ " "+position);
 
         try {
