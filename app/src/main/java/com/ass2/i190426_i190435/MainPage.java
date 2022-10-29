@@ -80,7 +80,7 @@ public class MainPage extends AppCompatActivity {
 
         adapterHorizontalMusic=new MyAdapterHorizontalMusic(ls, MainPage.this);
         rv.setAdapter(adapterHorizontalMusic);
-        RecyclerView.LayoutManager lm=new LinearLayoutManager(MainPage.this, LinearLayoutManager.HORIZONTAL, true);
+        RecyclerView.LayoutManager lm=new LinearLayoutManager(MainPage.this, LinearLayoutManager.HORIZONTAL, false);
         rv.setLayoutManager(lm);
 
         starting();

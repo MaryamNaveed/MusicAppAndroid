@@ -8,6 +8,8 @@ import android.Manifest;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +48,11 @@ public class RecordMusic extends AppCompatActivity {
     Uri selectedImage=null;
     String img, audio;
     TextView recorded;
+    ImageView pause;
+    boolean isPause=true;
+    int pauseLength=0;
+    MediaPlayer mediaPlayer = new MediaPlayer();
+    boolean firstTime = true;
 
 
     @Override
@@ -55,6 +63,7 @@ public class RecordMusic extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         mNavigationBottom=findViewById(R.id.mNavigationBottom);
         recorded=findViewById(R.id.recorded);
+        pause=findViewById(R.id.pause);
 
         mNavigationBottom.setSelectedItemId(R.id.page_2);
 
@@ -73,6 +82,16 @@ public class RecordMusic extends AppCompatActivity {
                         break;
                 }
                 return true;
+            }
+        });
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                pause.setImageResource(R.drawable.play);
+                isPause=true;
+                pauseLength=0;
+
             }
         });
 
@@ -131,9 +150,40 @@ public class RecordMusic extends AppCompatActivity {
             }
         });
 
+        pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(recorded.getText().toString()=="upload"){
+                    if(firstTime){
+                        firstTime=false;
+                        playMusic();
+                    }
+                    else{
+                        if(isPause){
+                            mediaPlayer.seekTo(pauseLength);
+                            mediaPlayer.start();
+                            isPause=false;
+                            pause.setImageResource(R.drawable.pause);
+                        }
+                        else{
+                            mediaPlayer.pause();
+                            pauseLength=mediaPlayer.getCurrentPosition();
+                            isPause=true;
+                            pause.setImageResource(R.drawable.play);
+                        }
+                    }
+
+
+                }
+
+
+            }
+        });
+
 
     }
     private void startRecording() {
+        recorded.setText("");
         System.out.println(fileName);
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -156,12 +206,11 @@ public class RecordMusic extends AppCompatActivity {
         recorder.release();
         recorder = null;
         recorded.setText("upload");
+        pause.setImageResource(R.drawable.play);
 
     }
 
     public void uploadToFirebase(){
-
-
 
         Uri uri1 = Uri.fromFile(new File(fileName));
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -243,20 +292,7 @@ public class RecordMusic extends AppCompatActivity {
                                     }
                                 });;
 
-//                                Music m = new Music(
-//                                        title,
-//                                        genre,
-//                                        description,
-//                                        uri.toString(),
-//                                        selectedImage.toString()
-//                                );
-//
-//                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                                DatabaseReference myRef = database.getReference("music");
-//
-//
-//                                DatabaseReference abc = myRef.push();
-//                                abc.setValue(m);
+
 
                             }
                         });
@@ -288,6 +324,34 @@ public class RecordMusic extends AppCompatActivity {
             }else{
                 //User denied Permission.
             }
+        }
+    }
+
+    public void playMusic(){
+
+        pause.setImageResource(R.drawable.pause);
+
+        pauseLength=0;
+        mediaPlayer.reset();
+        mediaPlayer.setAudioAttributes(
+                new AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .build()
+        );
+
+
+        Uri myUri = Uri.fromFile(new File(fileName));
+
+
+        try {
+            mediaPlayer.setDataSource(getApplicationContext(), myUri);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+//            Toast.makeText(RecordMusic.this, "started", Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(RecordMusic.this, "error", Toast.LENGTH_LONG).show();
         }
     }
 

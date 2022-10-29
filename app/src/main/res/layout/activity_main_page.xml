@@ -97,7 +97,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight=".2"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -669,7 +670,7 @@
                     android:layout_gravity="center"
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginVertical="5dp"
-                    android:background="@drawable/circle">
+                    >
 
                 </de.hdodenhof.circleimageview.CircleImageView>
 
@@ -685,7 +686,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="User Name"
+
                     android:textColor="#FFC107"
                     android:textStyle="bold" />
 

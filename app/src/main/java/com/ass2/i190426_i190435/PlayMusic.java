@@ -8,6 +8,7 @@ import android.media.AudioAttributes;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,8 @@ public class PlayMusic extends AppCompatActivity {
     List<Music> ls;
     int position=0;
     Uri myUri;
+    int songDuration;
+    private Handler mHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +96,8 @@ public class PlayMusic extends AppCompatActivity {
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isPause=false;
+                play.setImageResource(R.drawable.pause);
                 position=position-1;
                 pauseLength=0;
                 if(position<0){
@@ -106,6 +111,8 @@ public class PlayMusic extends AppCompatActivity {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isPause=false;
+                play.setImageResource(R.drawable.pause);
                 position=position+1;
                 pauseLength=0;
                 if(position>=ls.size()){
@@ -144,11 +151,48 @@ public class PlayMusic extends AppCompatActivity {
         });
 
 
+
+        PlayMusic.this.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                if(mediaPlayer != null){
+                    songDuration=mediaPlayer.getDuration();
+                    seekBar.setMax(songDuration/100);
+                    int mCurrentPosition = mediaPlayer.getCurrentPosition() / 100;
+                    seekBar.setProgress(mCurrentPosition);
+                }
+                mHandler.postDelayed(this, 100);
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(mediaPlayer != null && fromUser){
+                    mediaPlayer.seekTo(progress * 1000);
+                }
+            }
+        });
+
+
     }
 
     public void playMusic(){
 
         pauseLength=0;
+
         mediaPlayer.reset();
         mediaPlayer.setAudioAttributes(
                 new AudioAttributes.Builder()
@@ -170,9 +214,10 @@ public class PlayMusic extends AppCompatActivity {
 
         try {
             mediaPlayer.setDataSource(getApplicationContext(), myUri);
+
             mediaPlayer.prepare();
             mediaPlayer.start();
-            Toast.makeText(PlayMusic.this, "started", Toast.LENGTH_LONG).show();
+            //Toast.makeText(PlayMusic.this, "started", Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(PlayMusic.this, "error", Toast.LENGTH_LONG).show();
