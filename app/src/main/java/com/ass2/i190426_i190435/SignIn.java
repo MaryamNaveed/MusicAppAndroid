@@ -63,6 +63,9 @@ public class SignIn extends AppCompatActivity {
                 ).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+                        Toast.makeText(SignIn.this,
+                                "Success",
+                                Toast.LENGTH_LONG).show();
                         Intent intent= new Intent(SignIn.this, MainPage.class);
                         startActivity(intent);
 

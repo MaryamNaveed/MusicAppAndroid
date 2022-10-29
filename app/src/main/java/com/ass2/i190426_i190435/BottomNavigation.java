@@ -20,8 +20,8 @@ import java.util.List;
 
 public class BottomNavigation extends AppCompatActivity {
 
-    TabLayout tabLayout;
-    FrameLayout viewPager;
+    //TabLayout tabLayout;
+    //FrameLayout viewPager;
     BottomNavigationView mNavigationBottom;
     MainPageFragment mainPageFragment;
 
@@ -32,7 +32,7 @@ public class BottomNavigation extends AppCompatActivity {
         setContentView(R.layout.activity_bottom_navigation);
 
         mNavigationBottom =findViewById(R.id.mNavigationBottom);
-        viewPager=findViewById(R.id.viewerPager);
+        //viewPager=findViewById(R.id.viewerPager);
 
         mNavigationBottom.getMenu().setGroupCheckable(0, true, false);
         for (int i=0; i<mNavigationBottom.getMenu().size(); i++) {
@@ -40,22 +40,29 @@ public class BottomNavigation extends AppCompatActivity {
         }
         mNavigationBottom.getMenu().setGroupCheckable(0, true, true);
 
-        mainPageFragment=new MainPageFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.viewerPager, new MainPageFragment()).commit();
+
+
+
+//        mainPageFragment=new MainPageFragment();
 
         mNavigationBottom.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment selectedFragment = null;
                 switch (item.getItemId()){
                     case R.id.page_1:
-                        initializeFragment(mainPageFragment);
+                        selectedFragment= new MainPageFragment();
                         break;
                     case R.id.page_2:
-
+//                        selectedFragment= new MainPageFragment();
                         break;
                     case R.id.page_3:
 
                         break;
                 }
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.viewerPager, selectedFragment).commit();
                 return true;
             }
         });
@@ -63,20 +70,11 @@ public class BottomNavigation extends AppCompatActivity {
 //        mNavigationBottom.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
 //            @Override
 //            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//                switch (item.getItemId()){
-//                    case R.id.page_1:
-//                        viewPager.
-//                        break;
-//                    case R.id.page_2:
-//
-//                        break;
-//                    case R.id.page_3:
-//
-//                        break;
-//                }
-//                return true;
+//                return false;
 //            }
 //        });
+
+
     }
 
     private void initializeFragment(Fragment fragment){

@@ -41,6 +41,7 @@ public class AddMusic extends AppCompatActivity {
     boolean selected = false, isSelected=false;
     Uri selectedImage=null;
     String audio, image;
+    TextView next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class AddMusic extends AppCompatActivity {
         description=findViewById(R.id.description);
         link=findViewById(R.id.link);
         upload=findViewById(R.id.upload);
+        next=findViewById(R.id.next);
 
         mNavigationBottom.setSelectedItemId(R.id.page_2);
 
@@ -95,9 +97,19 @@ public class AddMusic extends AppCompatActivity {
             }
         });
 
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+                startActivity(getIntent());
+            }
+        });
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("music");
         FirebaseStorage storage = FirebaseStorage.getInstance();
+
+
 
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,6 +223,7 @@ public class AddMusic extends AppCompatActivity {
                 }
             }
         });
+
 
         linktext.setOnClickListener(new View.OnClickListener() {
 

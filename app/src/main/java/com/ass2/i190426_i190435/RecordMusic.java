@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,6 +44,7 @@ public class RecordMusic extends AppCompatActivity {
     FirebaseAuth mAuth;
     Uri selectedImage=null;
     String img, audio;
+    TextView recorded;
 
 
     @Override
@@ -52,6 +54,7 @@ public class RecordMusic extends AppCompatActivity {
 
         mAuth=FirebaseAuth.getInstance();
         mNavigationBottom=findViewById(R.id.mNavigationBottom);
+        recorded=findViewById(R.id.recorded);
 
         mNavigationBottom.setSelectedItemId(R.id.page_2);
 
@@ -114,6 +117,21 @@ public class RecordMusic extends AppCompatActivity {
 
             }
         });
+
+        recorded.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(recorded.getText().toString()=="upload"){
+                    uploadToFirebase();
+                }
+                else{
+
+                }
+
+            }
+        });
+
+
     }
     private void startRecording() {
         System.out.println(fileName);
@@ -137,8 +155,8 @@ public class RecordMusic extends AppCompatActivity {
         recorder.stop();
         recorder.release();
         recorder = null;
+        recorded.setText("upload");
 
-        uploadToFirebase();
     }
 
     public void uploadToFirebase(){

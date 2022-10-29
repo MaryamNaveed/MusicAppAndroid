@@ -51,48 +51,11 @@ public class Search extends AppCompatActivity {
         temp=new ArrayList<>();
         mNavigationBottom=findViewById(R.id.mNavigationBottom);
 
-        //getMusic();
 
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         System.out.println(databaseReference);
 
-//        databaseReference.child("music").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                Iterable<DataSnapshot> children = snapshot.getChildren();
-//                System.out.println(children);
-//                for (DataSnapshot child: children){
-//                    Music value = child.getValue(Music.class);
-//                    System.out.println(value.title.toLowerCase()+ "       "+ searchText.toLowerCase(Locale.ROOT));
-//
-//                    if(value.title.toLowerCase().contains(searchText.toLowerCase()) ){
-//                        System.out.println("contain");
-//
-//                        ls.add(value);
-//
-//                    }
-//                    else if(value.genre.toLowerCase().contains(searchText.toLowerCase())){
-//
-//                        ls.add(value);
-//
-//                    }
-//
-//                    adapter.notifyDataSetChanged();
-//
-//                    for (Music i: ls){
-//                        System.out.println(i.title);
-//                        System.out.println(adapter.getItemCount());
-//                    }
-//
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+
 
         valueEventListener=new ValueEventListener() {
             @Override
@@ -123,7 +86,7 @@ public class Search extends AppCompatActivity {
         rv.setLayoutManager(lm);
 
         starting();
-//        adapter.notifyDataSetChanged();
+
 
         mNavigationBottom.setSelectedItemId(R.id.page_3);
 
@@ -155,7 +118,6 @@ public class Search extends AppCompatActivity {
 
                 List<Music> mylist=new ArrayList<>();
 
-//                databaseReference.child("music").addValueEventListener(valueEventListener);
 
                 for( Music m: temp){
                     System.out.println(m.title.toLowerCase()+ "       "+ searchText.toLowerCase(Locale.ROOT));
@@ -195,9 +157,6 @@ public class Search extends AppCompatActivity {
     }
 
     public void starting() {
-//        DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference();
-//        databaseReference.child("music").addValueEventListener(valueEventListener);
-
 
         List<Music> mylist=new ArrayList<>();
 

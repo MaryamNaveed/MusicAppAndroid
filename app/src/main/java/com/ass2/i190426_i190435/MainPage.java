@@ -3,6 +3,8 @@ package com.ass2.i190426_i190435;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -15,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -22,10 +25,17 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,6 +50,11 @@ public class MainPage extends AppCompatActivity {
     CircleImageView dp;
     TextView edit;
     Uri photoUrl;
+    RecyclerView rv;
+    List<Music> ls;
+    List<Music> temp;
+    MyAdapterHorizontalMusic adapterHorizontalMusic;
+    ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,26 +72,23 @@ public class MainPage extends AppCompatActivity {
         username.setText(user.getDisplayName());
         dp=findViewById(R.id.dp);
         edit=findViewById(R.id.edit);
+        rv = findViewById(R.id.rv);
+        ls=new ArrayList<>();
+        temp=new ArrayList<>();
 
-//        Uri photoUrl = user.getPhotoUrl();
-//        System.out.println(photoUrl);
-//        if(photoUrl!=null){
-//            dp.setImageURI(photoUrl);
-//        }
+
+
+        adapterHorizontalMusic=new MyAdapterHorizontalMusic(ls, MainPage.this);
+        rv.setAdapter(adapterHorizontalMusic);
+        RecyclerView.LayoutManager lm=new LinearLayoutManager(MainPage.this, LinearLayoutManager.HORIZONTAL, true);
+        rv.setLayoutManager(lm);
+
+        starting();
+
 
         if (user != null) {
-
-
-
             photoUrl = user.getProviderData().get(0).getPhotoUrl();
-
             Picasso.get().load(photoUrl.toString()).into(dp);
-
-
-
-//            Picasso.get().load(uri.toString()).into(dp);
-
-
         }
 
         menu.setOnClickListener(new View.OnClickListener() {
@@ -144,10 +156,89 @@ public class MainPage extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
         mNavigationBottom.getMenu().setGroupCheckable(0, true, false);
         for (int i=0; i<mNavigationBottom.getMenu().size(); i++) {
             mNavigationBottom.getMenu().getItem(i).setChecked(false);
         }
         mNavigationBottom.getMenu().setGroupCheckable(0, true, true);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        valueEventListener=new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                ls=new ArrayList<>();
+                for (DataSnapshot child: children) {
+                    Music value = child.getValue(Music.class);
+                    ls.add(value);
+
+                }
+
+                adapterHorizontalMusic=new MyAdapterHorizontalMusic(ls, MainPage.this);
+                adapterHorizontalMusic.notifyDataSetChanged();
+
+                rv.setAdapter(adapterHorizontalMusic);
+                RecyclerView.LayoutManager lm=new LinearLayoutManager(MainPage.this, LinearLayoutManager.HORIZONTAL, true);
+                rv.setLayoutManager(lm);
+                System.out.println("Size is: "+ls.size());
+//                Toast.makeText(MainPage.this, ls.size()+"", Toast.LENGTH_SHORT).show();
+                System.out.println(adapterHorizontalMusic.getItemCount());
+
+                databaseReference.child("music").removeEventListener(valueEventListener);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        databaseReference.child("music").addValueEventListener(valueEventListener);
     }
+
+
+    public void starting() {
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        valueEventListener=new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                ls=new ArrayList<>();
+                for (DataSnapshot child: children) {
+                    Music value = child.getValue(Music.class);
+                    ls.add(value);
+
+                }
+
+                adapterHorizontalMusic=new MyAdapterHorizontalMusic(ls, MainPage.this);
+                adapterHorizontalMusic.notifyDataSetChanged();
+
+                rv.setAdapter(adapterHorizontalMusic);
+                RecyclerView.LayoutManager lm=new LinearLayoutManager(MainPage.this, LinearLayoutManager.HORIZONTAL, true);
+                rv.setLayoutManager(lm);
+                System.out.println("Size is: "+ls.size());
+//                Toast.makeText(MainPage.this, ls.size()+"", Toast.LENGTH_SHORT).show();
+                System.out.println(adapterHorizontalMusic.getItemCount());
+
+                databaseReference.child("music").removeEventListener(valueEventListener);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+
+        databaseReference.child("music").addValueEventListener(valueEventListener);
+
+
+
+    }
+
+
 }
