@@ -43,7 +43,7 @@ public class ListenLaterMusic extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_listen_later_music);
 
         rv=findViewById(R.id.rv);
 
@@ -64,7 +64,7 @@ public class ListenLaterMusic extends AppCompatActivity {
                 temp=new ArrayList<>();
                 for (DataSnapshot child: children) {
                     Music value = child.getValue(Music.class);
-                    temp.add(value);
+                    ls.add(value);
                 }
 
                 databaseReference.child("listenLater").removeEventListener(valueEventListener);
@@ -131,14 +131,11 @@ public class ListenLaterMusic extends AppCompatActivity {
 
                 }
 
-                adapter=new MyAdapterMusic(ls, ListenLaterMusic.this);
+
                 adapter.notifyDataSetChanged();
 
-                rv.setAdapter(adapter);
-                RecyclerView.LayoutManager lm=new LinearLayoutManager(ListenLaterMusic.this, LinearLayoutManager.HORIZONTAL, true);
-                rv.setLayoutManager(lm);
-                System.out.println("Size is: "+ls.size());
-//                Toast.makeText(MainPage.this, ls.size()+"", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(ListenLaterMusic.this, ls.size()+"", Toast.LENGTH_SHORT).show();
                 System.out.println(adapter.getItemCount());
 
                 databaseReference.child("listenLater").removeEventListener(valueEventListener);
@@ -177,14 +174,11 @@ public class ListenLaterMusic extends AppCompatActivity {
 
                 }
 
-                adapter=new MyAdapterMusic(ls, ListenLaterMusic.this);
+
                 adapter.notifyDataSetChanged();
 
-                rv.setAdapter(adapter);
-                RecyclerView.LayoutManager lm=new LinearLayoutManager(ListenLaterMusic.this, LinearLayoutManager.HORIZONTAL, true);
-                rv.setLayoutManager(lm);
-                System.out.println("Size is: "+ls.size());
-//                Toast.makeText(MainPage.this, ls.size()+"", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(ListenLaterMusic.this, ls.size()+"", Toast.LENGTH_SHORT).show();
                 System.out.println(adapter.getItemCount());
 
                 databaseReference.child("listenLater").removeEventListener(valueEventListener);

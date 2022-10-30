@@ -65,6 +65,7 @@ public class Search extends AppCompatActivity {
                  for (DataSnapshot child: children) {
                      Music value = child.getValue(Music.class);
                      temp.add(value);
+                     ls.add(value);
                  }
 
                  databaseReference.child("music").removeEventListener(valueEventListener);
@@ -162,30 +163,33 @@ public class Search extends AppCompatActivity {
     public void starting() {
 
         List<Music> mylist=new ArrayList<>();
+        ls = new ArrayList<>();
 
         for(Music m: temp){
             if(m.title.toLowerCase().contains(searchText.toLowerCase()) ){
                 System.out.println("contain");
 
                 mylist.add(m);
+                ls.add(m);
 
             }
             else if(m.genre.toLowerCase().contains(searchText.toLowerCase())){
 
                 mylist.add(m);
+                ls.add(m);
 
             }
         }
-        ls=mylist;
 
-        adapter=new MyAdapterMusic(ls, Search.this);
+
+
         adapter.notifyDataSetChanged();
 
-        rv.setAdapter(adapter);
+       /* rv.setAdapter(adapter);
         RecyclerView.LayoutManager lm=new LinearLayoutManager(Search.this);
         rv.setLayoutManager(lm);
         System.out.println(ls.size());
-        System.out.println(adapter.getItemCount());
+        System.out.println(adapter.getItemCount());*/
 
 
     }

@@ -48,6 +48,7 @@ public class MyAdapterMusic extends RecyclerView.Adapter<MyAdapterMusic.MyViewHo
     public void onBindViewHolder(@NonNull MyAdapterMusic.MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         holder.title.setText(ls.get(position).getTitle());
         holder.genre.setText(ls.get(position).getGenre());
+//        Toast.makeText(c, ls.get(position).getTitle(), Toast.LENGTH_SHORT).show();
 
         Picasso.get().load(ls.get(position).getImage()).into(holder.image);
 

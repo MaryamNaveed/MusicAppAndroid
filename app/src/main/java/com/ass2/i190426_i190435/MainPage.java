@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
@@ -55,6 +54,7 @@ public class MainPage extends AppCompatActivity {
     List<Music> temp;
     MyAdapterHorizontalMusic adapterHorizontalMusic;
     ValueEventListener valueEventListener;
+    TextView chatApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +76,15 @@ public class MainPage extends AppCompatActivity {
         profileImage=findViewById(R.id.profileImage);
         ls=new ArrayList<>();
         temp=new ArrayList<>();
+
+        chatApp=findViewById(R.id.chatApp);
+
+        chatApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainPage.this, TabLayout.class));
+            }
+        });
 
 
         adapterHorizontalMusic=new MyAdapterHorizontalMusic(ls, MainPage.this);

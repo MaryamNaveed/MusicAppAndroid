@@ -1,7 +1,7 @@
 package com.ass2.i190426_i190435;
 
 public class User {
-    String id, name, dp, email, gender;
+    String id, name, dp, email, gender, num;
 
     public User(String id, String name, String dp, String email, String gender) {
         this.id=id;
@@ -9,6 +9,23 @@ public class User {
         this.dp = dp;
         this.email = email;
         this.gender = gender;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getNum() {
+        return num;
+    }
+
+    public void setNum(String num) {
+        this.num = num;
     }
 
     public String getGender() {

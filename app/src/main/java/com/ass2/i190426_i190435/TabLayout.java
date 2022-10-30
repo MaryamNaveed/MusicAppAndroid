@@ -33,7 +33,7 @@ public class TabLayout extends AppCompatActivity {
         viewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
 
         viewPagerAdapter.AddItems(new ChatFragment(), "Chat");
-        viewPagerAdapter.AddItems(new PeopleFragment(), "People");
+        viewPagerAdapter.AddItems(new PeopleFragment(), "Contacts");
         viewPagerAdapter.AddItems(new CallFragment(), "Calls");
 
         viewPager.setAdapter(viewPagerAdapter);

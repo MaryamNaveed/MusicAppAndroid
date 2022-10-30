@@ -43,7 +43,7 @@ public class LikedMusic extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+        setContentView(R.layout.activity_liked_music);
 
         rv=findViewById(R.id.rv);
 
@@ -64,7 +64,7 @@ public class LikedMusic extends AppCompatActivity {
                 temp=new ArrayList<>();
                 for (DataSnapshot child: children) {
                     Music value = child.getValue(Music.class);
-                    temp.add(value);
+                    ls.add(value);
                 }
 
                 databaseReference.child("like").removeEventListener(valueEventListener);
@@ -95,7 +95,7 @@ public class LikedMusic extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.page_1:
-
+//                        startActivity(new Intent(LikeMusic.this, LikedMusic.class));
                         break;
                     case R.id.page_2:
                         startActivity(new Intent(LikedMusic.this, AddMusic.class));
@@ -106,6 +106,7 @@ public class LikedMusic extends AppCompatActivity {
                     case R.id.page_4:
                         startActivity(new Intent(LikedMusic.this, ListenLaterMusic.class));
                         break;
+
 
 
                 }
@@ -133,14 +134,11 @@ public class LikedMusic extends AppCompatActivity {
 
                 }
 
-                adapter=new MyAdapterMusic(ls, LikedMusic.this);
+
                 adapter.notifyDataSetChanged();
 
-                rv.setAdapter(adapter);
-                RecyclerView.LayoutManager lm=new LinearLayoutManager(LikedMusic.this, LinearLayoutManager.HORIZONTAL, true);
-                rv.setLayoutManager(lm);
-                System.out.println("Size is: "+ls.size());
-//                Toast.makeText(MainPage.this, ls.size()+"", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(LikedMusic.this, ls.size()+"", Toast.LENGTH_SHORT).show();
                 System.out.println(adapter.getItemCount());
 
                 databaseReference.child("like").removeEventListener(valueEventListener);
@@ -179,14 +177,11 @@ public class LikedMusic extends AppCompatActivity {
 
                 }
 
-                adapter=new MyAdapterMusic(ls, LikedMusic.this);
+
                 adapter.notifyDataSetChanged();
 
-                rv.setAdapter(adapter);
-                RecyclerView.LayoutManager lm=new LinearLayoutManager(LikedMusic.this, LinearLayoutManager.HORIZONTAL, true);
-                rv.setLayoutManager(lm);
-                System.out.println("Size is: "+ls.size());
-//                Toast.makeText(MainPage.this, ls.size()+"", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(LikedMusic.this, ls.size()+"", Toast.LENGTH_SHORT).show();
                 System.out.println(adapter.getItemCount());
 
                 databaseReference.child("like").removeEventListener(valueEventListener);
