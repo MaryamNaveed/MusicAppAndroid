@@ -71,6 +71,8 @@ public class MyAdapterContacts extends RecyclerView.Adapter<MyAdapterContacts.My
                             intent.putExtra("phone", ls.get(position).getNum());
                             intent.putExtra("profile", value.getDp());
                             intent.putExtra("id", value.getId());
+                            intent.putExtra("lastSeen", value.getLastSeen());
+                            intent.putExtra("status", value.getStatus());
                             c.startActivity(intent);
                             present=true;
                         }

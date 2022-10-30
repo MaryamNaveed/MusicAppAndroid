@@ -2,17 +2,20 @@ package com.ass2.i190426_i190435;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TableLayout;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,7 +26,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TabLayout extends AppCompatActivity {
 
@@ -37,6 +43,27 @@ public class TabLayout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_layout);
 
+        FirebaseUser user =FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference();
+        Query query = ref.child("user").orderByChild("id").equalTo(user.getUid());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    HashMap<String, Object> hashMap=new HashMap<>();
+                    hashMap.put("status","online");
+                    appleSnapshot.getRef().updateChildren(hashMap);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+            });
+
         tabLayout=findViewById(R.id.tabLayout);
         viewPager=findViewById(R.id.viewerPager);
         viewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager());
@@ -48,6 +75,8 @@ public class TabLayout extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
 
         tabLayout.setupWithViewPager(viewPager);
+
+
 
     }
 
@@ -140,7 +169,9 @@ public class TabLayout extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
-
+                   HashMap<String, Object> hashMap=new HashMap<>();
+                   hashMap.put("status","online");
+                    appleSnapshot.getRef().updateChildren(hashMap);
                 }
 
             }
@@ -154,6 +185,36 @@ public class TabLayout extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+
+
         super.onPause();
+        Toast.makeText(TabLayout.this,"Pause", Toast.LENGTH_SHORT).show();
+        FirebaseUser user =FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference();
+        Query query = ref.child("user").orderByChild("id").equalTo(user.getUid());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    HashMap<String, Object> hashMap=new HashMap<>();
+                    hashMap.put("status","offline");
+                    appleSnapshot.getRef().updateChildren(hashMap);
+                    HashMap<String, Object> hashMap1=new HashMap<>();
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    String lastSeen="Last Seen "+ now.format(dtf);
+                    hashMap1.put("lastSeen",lastSeen);
+                    appleSnapshot.getRef().updateChildren(hashMap1);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

@@ -54,6 +54,8 @@ public class UserAdpater extends RecyclerView.Adapter<UserAdpater.MyViewHolder> 
                     intent.putExtra("phone", ls.get(position).getNum());
                     intent.putExtra("profile", ls.get(position).getDp());
                     intent.putExtra("id", ls.get(position).getId());
+                intent.putExtra("lastSeen", ls.get(position).getLastSeen());
+                intent.putExtra("status", ls.get(position).getStatus());
                     c.startActivity(intent);
 
             }
@@ -68,6 +70,8 @@ public class UserAdpater extends RecyclerView.Adapter<UserAdpater.MyViewHolder> 
                 intent.putExtra("phone", ls.get(position).getNum());
                 intent.putExtra("profile", ls.get(position).getDp());
                 intent.putExtra("id", ls.get(position).getId());
+                intent.putExtra("lastSeen", ls.get(position).getLastSeen());
+                intent.putExtra("status", ls.get(position).getStatus());
                 c.startActivity(intent);
 
             }

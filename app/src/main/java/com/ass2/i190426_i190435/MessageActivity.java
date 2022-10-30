@@ -28,6 +28,7 @@ import com.squareup.picasso.Picasso;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -35,13 +36,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class MessageActivity extends AppCompatActivity {
 
     CircleImageView profile;
-    TextView name;
+    TextView name, seen;
     EditText msg;
     ImageButton send;
 
     FirebaseUser mAuth;
 
-    String userName, userDp, id;
+    String userName, userDp, id, seenUser, statusUser;
 
     RecyclerView rv;
 
@@ -60,6 +61,7 @@ public class MessageActivity extends AppCompatActivity {
         msg=findViewById(R.id.msg);
         ls=new ArrayList<>();
         rv=findViewById(R.id.rv);
+        seen=findViewById(R.id.seen);
 
         adapter=new MessageAdapter(ls, MessageActivity.this);
         rv.setAdapter(adapter);
@@ -73,6 +75,17 @@ public class MessageActivity extends AppCompatActivity {
 
         userDp=getIntent().getStringExtra("profile");
         Picasso.get().load(Uri.parse(userDp)).into(profile);
+
+        seenUser=getIntent().getStringExtra("lastSeen");
+        statusUser=getIntent().getStringExtra("status");
+
+        if(statusUser.equals("offline")){
+            seen.setText(seenUser);
+        }
+        else{
+            seen.setText(statusUser);
+        }
+
 
         String id = getIntent().getStringExtra("id");
 
@@ -99,6 +112,23 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 getMessage(mAuth.getUid(), id);
+
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    User u=appleSnapshot.getValue(User.class);
+                    seenUser=u.lastSeen;
+                    statusUser=u.status;
+
+                    if(statusUser.equals("offline")){
+                        seen.setText(seenUser);
+                    }
+                    else{
+                        seen.setText(statusUser);
+                    }
+
+                }
+
+
+
             }
 
             @Override
@@ -156,5 +186,65 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FirebaseUser user =FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference();
+        Query query = ref.child("user").orderByChild("id").equalTo(user.getUid());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    HashMap<String, Object> hashMap=new HashMap<>();
+                    hashMap.put("status","online");
+                    appleSnapshot.getRef().updateChildren(hashMap);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+
+
+        super.onPause();
+
+        FirebaseUser user =FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference ref=FirebaseDatabase.getInstance().getReference();
+        Query query = ref.child("user").orderByChild("id").equalTo(user.getUid());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    HashMap<String, Object> hashMap=new HashMap<>();
+                    hashMap.put("status","offline");
+                    appleSnapshot.getRef().updateChildren(hashMap);
+                    HashMap<String, Object> hashMap1=new HashMap<>();
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    String lastSeen="Last Seen "+ now.format(dtf);
+                    hashMap1.put("lastSeen",lastSeen);
+                    appleSnapshot.getRef().updateChildren(hashMap1);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

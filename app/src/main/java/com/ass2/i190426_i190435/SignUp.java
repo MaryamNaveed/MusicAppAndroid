@@ -2,10 +2,12 @@ package com.ass2.i190426_i190435;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -34,6 +36,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.lang.annotation.Documented;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -143,12 +147,17 @@ public class SignUp extends AppCompatActivity {
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     Task<Uri> task = taskSnapshot.getStorage().getDownloadUrl();
                                     task.addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @RequiresApi(api = Build.VERSION_CODES.O)
                                         @Override
                                         public void onSuccess(Uri uri) {
 
                                             Toast.makeText(SignUp.this,mAuth.getCurrentUser().getUid(),Toast.LENGTH_LONG).show();
 
-                                          User m = new User(mAuth.getCurrentUser().getUid(), name.getText().toString(), uri.toString(), email.getText().toString(), gender, phone.getText().toString());
+                                            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                                            LocalDateTime now = LocalDateTime.now();
+                                            String lastSeen="Last Seen "+dtf.format(now);
+
+                                          User m = new User(mAuth.getCurrentUser().getUid(), name.getText().toString(), uri.toString(), email.getText().toString(), gender, phone.getText().toString(), "offline", lastSeen);
 
 
                                             DatabaseReference abc = myRef.push();
