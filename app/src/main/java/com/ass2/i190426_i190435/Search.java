@@ -39,6 +39,7 @@ public class Search extends AppCompatActivity {
     BottomNavigationView mNavigationBottom;
     String searchText="";
     ValueEventListener valueEventListener;
+    ValueEventListener valueEventListener1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +66,6 @@ public class Search extends AppCompatActivity {
                  for (DataSnapshot child: children) {
                      Music value = child.getValue(Music.class);
                      temp.add(value);
-                     ls.add(value);
                  }
 
                  databaseReference.child("music").removeEventListener(valueEventListener);
@@ -164,26 +164,57 @@ public class Search extends AppCompatActivity {
 
         List<Music> mylist=new ArrayList<>();
         ls = new ArrayList<>();
+        temp = new ArrayList<>();
 
-        for(Music m: temp){
-            if(m.title.toLowerCase().contains(searchText.toLowerCase()) ){
-                System.out.println("contain");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("music");
 
-                mylist.add(m);
-                ls.add(m);
+
+        valueEventListener1=new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Iterable<DataSnapshot> children = snapshot.getChildren();
+                temp = new ArrayList<>();
+                for (DataSnapshot child : children) {
+                    Music m = child.getValue(Music.class);
+                    temp.add(m);
+                    if(m.title.toLowerCase().contains(searchText.toLowerCase()) ){
+                        System.out.println("contain");
+
+                        mylist.add(m);
+                        ls.add(m);
+
+                    }
+                    else if(m.genre.toLowerCase().contains(searchText.toLowerCase())){
+
+                        mylist.add(m);
+                        ls.add(m);
+
+                    }
+                    adapter=new MyAdapterMusic(ls, Search.this);
+                    adapter.notifyDataSetChanged();
+
+                    rv.setAdapter(adapter);
+
+                }
+
+                databaseReference.child("music").removeEventListener(valueEventListener1);
 
             }
-            else if(m.genre.toLowerCase().contains(searchText.toLowerCase())){
 
-                mylist.add(m);
-                ls.add(m);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        }
+        };
+
+        databaseReference.addValueEventListener(valueEventListener1);
 
 
 
-        adapter.notifyDataSetChanged();
+
+
+
+
 
        /* rv.setAdapter(adapter);
         RecyclerView.LayoutManager lm=new LinearLayoutManager(Search.this);

@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
-    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS"/>
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
 
     <application
         android:allowBackup="true"
@@ -20,6 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.I190426_i190435"
         tools:targetApi="31">
+        <activity
+            android:name=".AddContact"
+            android:exported="false" />
         <activity
             android:name=".MessageActivity"
             android:exported="false" />
@@ -74,7 +77,6 @@
         <activity
             android:name=".CreateAccount"
             android:exported="false" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -88,9 +90,10 @@
         <receiver android:name=".NotificationServiceMusic" />
 
         <service android:name=".ServiceMusic" />
-        <service android:name=".MyConnectionnService"
-            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
-            android:exported="true">
+        <service
+            android:name=".MyConnectionnService"
+            android:exported="true"
+            android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE">
             <intent-filter>
                 <action android:name="android.telecom.ConnectionService" />
             </intent-filter>

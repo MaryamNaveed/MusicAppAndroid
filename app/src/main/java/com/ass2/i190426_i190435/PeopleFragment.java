@@ -3,6 +3,7 @@ package com.ass2.i190426_i190435;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
@@ -22,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,13 +43,14 @@ public class PeopleFragment extends Fragment {
     List<User> ls;
     EditText search;
     String searchText="";
+    ImageView add;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
 
 
         return inflater.inflate(R.layout.fragment_people, container, false);
@@ -61,6 +64,7 @@ public class PeopleFragment extends Fragment {
         ls=new ArrayList<>();
         adapter=new MyAdapterContacts(ls, getActivity());
         rv.setAdapter(adapter);
+        add=getView().findViewById(R.id.add);
         RecyclerView.LayoutManager lm=new LinearLayoutManager(getActivity());
         rv.setLayoutManager(lm);
         search.addTextChangedListener(new TextWatcher() {
@@ -73,7 +77,7 @@ public class PeopleFragment extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 searchText = search.getText().toString();
                 ls.clear();
-//                Toast.makeText(getActivity(), "Search", Toast.LENGTH_SHORT).show();
+
                 if(searchText.isEmpty()){
                     ls.addAll(temp);
                 }
@@ -81,7 +85,7 @@ public class PeopleFragment extends Fragment {
                     for(User u1: temp){
                         if(u1.getName().toLowerCase().contains(searchText.toLowerCase())){
                             ls.add(u1);
-//                            Toast.makeText(getActivity(), temp.get(i).getName(), Toast.LENGTH_SHORT).show();
+
                         }
                         else if(u1.getNum().toLowerCase().contains(searchText.toLowerCase())){
                             ls.add(u1);
@@ -100,12 +104,20 @@ public class PeopleFragment extends Fragment {
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 200);
-            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+
         } else {
-            // Android version is lesser than 6.0 or the permission is already granted.
+
             LoadContacts();
 
         }
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), AddContact.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
