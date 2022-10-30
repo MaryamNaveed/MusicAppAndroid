@@ -44,6 +44,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     public void onBindViewHolder(@NonNull MessageAdapter.MyViewHolder holder, int position) {
         Chat chat=ls.get(position);
         holder.msg.setText(chat.getMessage());
+        holder.date.setText(chat.getDate());
 
     }
 
@@ -53,11 +54,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView msg;
+        TextView msg, date;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             msg=itemView.findViewById(R.id.msg);
+            date=itemView.findViewById(R.id.date);
         }
     }
 
@@ -65,7 +67,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     public int getItemViewType(int position){
         FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
 
-        if(ls.get(position).getSender()==firebaseUser.getUid()){
+        if(ls.get(position).getSender().equals(firebaseUser.getUid())){
             return 0;
         }
         else{

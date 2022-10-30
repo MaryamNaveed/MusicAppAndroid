@@ -20,7 +20,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:background="@drawable/background_chat_left">
+
+        </TextView>
+
+        <TextView
+            android:textColor="@color/black"
+            android:paddingLeft="20dp"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/msg"
+            >
 
         </TextView>
 
