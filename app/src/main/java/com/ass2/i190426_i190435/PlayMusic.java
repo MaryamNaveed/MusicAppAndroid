@@ -258,22 +258,24 @@ public class PlayMusic extends AppCompatActivity implements Play {
             @Override
             public void onClick(View view) {
                 if(isPause){
-                    CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
-                            R.drawable.pause, position, ls.size()-1);
-
-                    mediaPlayer.seekTo(pauseLength);
-                    mediaPlayer.start();
-                    isPause=false;
-                    play.setImageResource(R.drawable.pause);
+                    onPlayMusic();
+//                    CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+//                            R.drawable.pause, position, ls.size()-1);
+//
+//                    mediaPlayer.seekTo(pauseLength);
+//                    mediaPlayer.start();
+//                    isPause=false;
+//                    play.setImageResource(R.drawable.pause);
                 }
                 else{
-                    CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
-                            R.drawable.play, position, ls.size()-1);
-
-                    mediaPlayer.pause();
-                    pauseLength=mediaPlayer.getCurrentPosition();
-                    isPause=true;
-                    play.setImageResource(R.drawable.play);
+                    onPauseMusic();
+//                    CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+//                            R.drawable.play, position, ls.size()-1);
+//
+//                    mediaPlayer.pause();
+//                    pauseLength=mediaPlayer.getCurrentPosition();
+//                    isPause=true;
+//                    play.setImageResource(R.drawable.play);
                 }
 
             }
@@ -294,17 +296,18 @@ public class PlayMusic extends AppCompatActivity implements Play {
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isPause=false;
-                play.setImageResource(R.drawable.pause);
-                position=position-1;
-                if(position<0){
-                    position=0;
-                }
-                pauseLength=0;
-                CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
-                        R.drawable.music_note, position, ls.size()-1);
-
-                playMusic();
+                onPrevious();
+//                isPause=false;
+//                play.setImageResource(R.drawable.pause);
+//                position=position-1;
+//                if(position<0){
+//                    position=0;
+//                }
+//                pauseLength=0;
+//                /*CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+//                        R.drawable.music_note, position, ls.size()-1);*/
+//
+//                playMusic();
 
             }
         });
@@ -312,17 +315,18 @@ public class PlayMusic extends AppCompatActivity implements Play {
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                isPause=false;
-                play.setImageResource(R.drawable.pause);
-                position=position+1;
-                if(position>=ls.size()){
-                    position=ls.size()-1;
-                }
-                pauseLength=0;
-                CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
-                        R.drawable.music_note, position, ls.size()-1);
-
-                playMusic();
+                onNext();
+//                isPause=false;
+//                play.setImageResource(R.drawable.pause);
+//                position=position+1;
+//                if(position>=ls.size()){
+//                    position=ls.size()-1;
+//                }
+//                pauseLength=0;
+//                /*CreateNotificationMusic.createNotification(PlayMusic.this, ls.get(position),
+//                        R.drawable.music_note, position, ls.size()-1);*/
+//
+//                playMusic();
             }
         });
 
@@ -480,6 +484,7 @@ public class PlayMusic extends AppCompatActivity implements Play {
     public void onPrevious() {
 
         position=position-1;
+        play.setImageResource(R.drawable.pause);
         if(position<0){
             position=0;
         }
@@ -517,6 +522,7 @@ public class PlayMusic extends AppCompatActivity implements Play {
     @Override
     public void onNext() {
         position=position+1;
+        play.setImageResource(R.drawable.pause);
         if(position>=ls.size()){
             position=ls.size()-1;
         }
