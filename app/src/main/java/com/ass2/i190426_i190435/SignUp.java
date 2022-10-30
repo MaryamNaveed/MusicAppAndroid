@@ -42,12 +42,13 @@ public class SignUp extends AppCompatActivity {
     TextView signin, show;
     String gender="";
     ImageView male,female,prefernottosay;
-    EditText name,email, password;
+    EditText name,email, password, phone;
     Button signup;
     FirebaseAuth mAuth;
     Boolean showed = false;
     CircleImageView dp;
     Uri selectedImage= null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +66,7 @@ public class SignUp extends AppCompatActivity {
         email=findViewById(R.id.email);
         password=findViewById(R.id.password);
         dp = findViewById(R.id.dp);
+        phone = findViewById(R.id.phone);
 
         male.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,7 +146,9 @@ public class SignUp extends AppCompatActivity {
                                         @Override
                                         public void onSuccess(Uri uri) {
 
-                                          User m = new User(mAuth.getCurrentUser().getUid().toString(), name.getText().toString(), uri.toString(), email.getText().toString(), gender);
+                                            Toast.makeText(SignUp.this,mAuth.getCurrentUser().getUid(),Toast.LENGTH_LONG).show();
+
+                                          User m = new User(mAuth.getCurrentUser().getUid(), name.getText().toString(), uri.toString(), email.getText().toString(), gender, phone.getText().toString());
 
 
                                             DatabaseReference abc = myRef.push();

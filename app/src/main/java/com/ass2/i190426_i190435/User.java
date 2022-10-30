@@ -3,12 +3,13 @@ package com.ass2.i190426_i190435;
 public class User {
     String id, name, dp, email, gender, num;
 
-    public User(String id, String name, String dp, String email, String gender) {
+    public User(String id, String name, String dp, String email, String gender, String num) {
         this.id=id;
         this.name = name;
         this.dp = dp;
         this.email = email;
         this.gender = gender;
+        this.num=num;
     }
 
 

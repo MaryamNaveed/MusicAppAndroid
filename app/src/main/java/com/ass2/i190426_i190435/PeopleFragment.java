@@ -73,7 +73,7 @@ public class PeopleFragment extends Fragment {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 searchText = search.getText().toString();
                 ls.clear();
-                Toast.makeText(getActivity(), "Search", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "Search", Toast.LENGTH_SHORT).show();
                 if(searchText.isEmpty()){
                     ls.addAll(temp);
                 }
@@ -81,7 +81,7 @@ public class PeopleFragment extends Fragment {
                     for(User u1: temp){
                         if(u1.getName().toLowerCase().contains(searchText.toLowerCase())){
                             ls.add(u1);
-                            Toast.makeText(getActivity(), temp.get(i).getName(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(getActivity(), temp.get(i).getName(), Toast.LENGTH_SHORT).show();
                         }
                         else if(u1.getNum().toLowerCase().contains(searchText.toLowerCase())){
                             ls.add(u1);

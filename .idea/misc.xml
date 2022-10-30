@@ -4,9 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1735" />
+        <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/drawable/background_chat_left.xml" value="0.134" />
+        <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/drawable/background_chat_right.xml" value="0.134" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/drawable/bg_color_tab.xml" value="0.1" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1735" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/drawable/roundedwhitebutton.xml" value="0.1735" />
+        <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/drawable/send.xml" value="0.134" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_add_music.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_bottom_navigation.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_create_account.xml" value="0.18" />
@@ -17,6 +20,7 @@
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_main.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_main2.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_main_page.xml" value="0.17074275362318841" />
+        <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_message.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_play_music.xml" value="0.15" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_record_info.xml" value="0.19" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_record_music.xml" value="0.1" />
@@ -24,6 +28,9 @@
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_sign_in.xml" value="0.25" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_sign_up.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/activity_tab_layout.xml" value="0.1" />
+        <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/chat_row.xml" value="0.17074275362318841" />
+        <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/chat_row_left.xml" value="0.17074275362318841" />
+        <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/chat_row_right.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/contacts_row.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/fragment_call.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/fragment_chat.xml" value="0.17074275362318841" />
@@ -31,6 +38,7 @@
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/fragment_people.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/horizontal_row_music.xml" value="0.25" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/music_row.xml" value="0.18" />
+        <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/layout/row_user.xml" value="0.17074275362318841" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/menu/bottom_navigation_menu1.xml" value="0.20416666666666666" />
         <entry key="..\:/7thSemester/Smd/Assignment2/i190426_i190435/app/src/main/res/menu/options_menu.xml" value="0.20416666666666666" />
