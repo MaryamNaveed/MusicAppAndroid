@@ -492,6 +492,60 @@ public class PlayMusic extends AppCompatActivity implements Play {
                 R.drawable.music_note, position, ls.size()-1);
         title.setText(ls.get(position).getTitle());
         playMusic();
+        foundLike=false;
+        foundListen = false;
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+
+
+        Query query = ref.child("like").orderByChild("link").equalTo(ls.get(position).getLink());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    foundLike = true;
+                    like.setColorFilter(R.color.grey);
+
+
+                }
+
+                if(foundLike==false) {
+                    like.setColorFilter(Color.rgb(255,255,255));
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        Query query1 = ref.child("listenLater").orderByChild("link").equalTo(ls.get(position).getLink());
+
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    foundListen = true;
+                    listenLater.setColorFilter(R.color.grey);
+
+
+                }
+
+                if(foundListen==false) {
+                    listenLater.setColorFilter(Color.rgb(255,255,255));
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
@@ -530,6 +584,60 @@ public class PlayMusic extends AppCompatActivity implements Play {
                 R.drawable.music_note, position, ls.size()-1);
         title.setText(ls.get(position).getTitle());
         playMusic();
+
+        foundLike=false;
+        foundListen = false;
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        
+        Query query = ref.child("like").orderByChild("link").equalTo(ls.get(position).getLink());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    foundLike = true;
+                    like.setColorFilter(R.color.grey);
+
+
+                }
+
+                if(foundLike==false) {
+                    like.setColorFilter(Color.rgb(255,255,255));
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        Query query1 = ref.child("listenLater").orderByChild("link").equalTo(ls.get(position).getLink());
+
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot appleSnapshot: snapshot.getChildren()) {
+                    foundListen = true;
+                    listenLater.setColorFilter(R.color.grey);
+
+
+                }
+
+                if(foundListen==false) {
+                    listenLater.setColorFilter(Color.rgb(255,255,255));
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
